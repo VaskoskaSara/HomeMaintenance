@@ -339,3 +339,31 @@ input {
   font-size:16px;
 
 }
+
+.error-message{
+  color: red;
+}
+
+.section {
+  position: relative;
+  padding: 20px;
+  margin: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+/* Style for the arrow */
+.arrow {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.down {
+  transform: rotate(90deg);
+}
+
+.collapsed .down {
+  transform: rotate(-90deg);
+}

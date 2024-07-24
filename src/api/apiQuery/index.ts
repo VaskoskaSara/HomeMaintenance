@@ -1,7 +1,7 @@
-import axios from 'axios';
+import { api } from "../axiosInstance";
 
-export const api = axios.create({
- baseURL: 'https://pokeapi.co/api/v2/',
-});
-
-export const fetcher = (url: string) => api.get(url).then((res) => res.data);
+export const getFetcher = async (url: string) => {
+   var response = await api.get(url);
+   console.log(response);
+   return response;
+};

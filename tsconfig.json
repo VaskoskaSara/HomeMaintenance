@@ -8,8 +8,11 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "resolveJsonModule": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": "./",
+    "paths": {
+      "@hookform/resolvers/yup": ["node_modules/@hookform/resolvers/yup"]
+    }
   },
-  "include": ["./src/**/*", "babel.config.js"],
-  "exclude": ["node_modules"]
+  "include": ["./src/**/*", "babel.config.js", "node_modules"]
 }

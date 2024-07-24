@@ -14,7 +14,8 @@ const AppRoutes: () => JSX.Element = () => {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/services" element={<Services />} />
                     <Route path="/services/:id" element={<ServiceDetails />} />
-                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path={"/login"} element={<RegisterPage />} />
+                    <Route path={"/register"} element={<RegisterPage />} />
                     </Routes>
                 </Suspense>
             </Router>

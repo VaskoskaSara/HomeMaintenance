@@ -5,7 +5,7 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: ['source-map-loader'],
         exclude: /node_modules/,
       },
     ],

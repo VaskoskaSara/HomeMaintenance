@@ -8,12 +8,16 @@ import * as yup from "yup";
 import { useLocation } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { getFetcher } from "src/api/apiQuery";
-import { postFetcher } from "src/api/apiCommand";
+import { postFormFetcher, postJsonFetcher } from "src/api/apiCommand";
 import  validator from 'validator';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { Button, Collapse, DatePicker, Form, Input, Layout, Menu, Steps } from "antd";
+import { Content, Header } from "antd/es/layout/layout";
+import { menuItems } from "../HomePage/HomePage";
+import Title from "antd/es/typography/Title";
+import moment from "moment";
+import { format } from "date-fns";
+import { RegisterForm } from "./RegisterForm";
+import { LoginForm } from "./LoginForm";
 
 const loginSchema = yup
 .object()
@@ -29,7 +33,7 @@ const schema = yup
   .oneOf(Object.values([0,1,2]))
   .required('Field is required'),
   fullName: yup.string().required(),
-  address: yup.string().required(),
+  city: yup.string().required(),
   email: yup.string().required("Email is a required").email("Email is not in valid format"),
   password: yup.string().required(),
   confirmPassword: yup
@@ -72,12 +76,12 @@ function RegisterPage(){
 
   const { trigger } = useSWRMutation(
     "/api/user/userRegistrations",
-    postFetcher
+    postFormFetcher
   );
 
   const { trigger : triggerLogin } = useSWRMutation(
     "/api/user/userLogin",
-    postFetcher
+    postJsonFetcher
   );
 
   const selectedOption = watch("positionId");
@@ -117,6 +121,7 @@ function RegisterPage(){
 
   const onLoginSubmitData= handleLoginSubmit(async(data) => {
     try {
+      
      triggerLogin(data);
      console.log(data);
     } catch (ex) {
@@ -174,52 +179,75 @@ function RegisterPage(){
     };
   }, []);
 
+  const [isLogin, setIsLogin] = useState(true);
+
+  const toggleForm = () => {
+    setIsLogin(!isLogin);
+  };
+
   return (
     <>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <link rel="stylesheet" href="style.css" />
-      </head>
-      <div className="wrapper">
-        <header id="header" style={{ color: "white" }} className="hoc clear">
-          <div id="logo" className="fl_left">
-            <h1>
-              <a href="index.html">HOME MAINTENANCE</a>
-            </h1>
+
+<Layout>
+      <Header style={{backgroundColor: "black"}}>
+        <h1 style={{ minWidth: 0, float: "left", color: "white", fontFamily: "" }}>HOME MAINTENANCE</h1>
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          defaultSelectedKeys={['1']}
+          items={menuItems}
+          style={{ backgroundColor: "black", float:"right" }} />
+      </Header>
+    <Content className="slider-container" style={{margin: "200px"}}>
+    <div className={`slider-content ${isLogin ? 'login' : 'register'}`}>
+        <LoginForm />
+          <RegisterForm />
+        {/* <div className="overlay-container">
+          <div className="overlay">
+            <div className="overlay-panel overlay-left">
+              <h1>Welcome Back!</h1>
+              <p style={{ marginBottom: "10px" }}>
+                To keep connected with us please login with your personal info
+              </p>
+              <button
+                className="ghost"
+                id="signIn"
+                style={{ backgroundColor: "black", border: "1px solid" }}
+              >
+                Sign In
+              </button>
+            </div>
+            <div className="overlay-panel overlay-right">
+              <h1>Hello, Friend!</h1>
+              <p>Enter your personal details and start journey with us</p>
+              <button
+                className="ghost"
+                id="signUp"
+                style={{
+                  border: "1px solid",
+                  color: "white",
+                  background: "black",
+                  marginTop: "10px",
+                }}
+                onClick={toggleForm}
+              >
+                Sign Up
+              </button>
+            </div>
           </div>
-          <nav id="mainav" className="fl_right">
-            <ul className="clear">
-              <li>
-                <a href="/">Home</a>
-              </li>
-              <li>
-                <a className="active" href="/services">
-                  Services
-                </a>
-              </li>
-              <li>
-                <a href="/contact">Contact</a>
-              </li>
-              <li>
-                <a href="" title="Language" className="drop">
-                  <i className="fas fa-globe"></i>
-                </a>
-                <ul>
-                  <li>EN</li>
-                  <li>MK</li>
-                </ul>
-                <ul></ul>
-              </li>
-            </ul>
-          </nav>
-        </header>
+        </div> */}
       </div>
-      {/* REGISTER */}
+    </Content>
+
+      </Layout>
+
+
+
+
       <div
         className="container registerPage"
         id="container"
-        style={{ color: "#170d0d" }}
+        style={{ color: "#170d0d"}}
       >
         <div className="form-container sign-up-container">
           <div className="container" style={{ textAlign: "left" }}>
@@ -232,11 +260,11 @@ function RegisterPage(){
               style={{ display: "grid" }}
             >
 
-              <Accordion>
-                <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
+              <Collapse>
+                {/* <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
                   General information
-                </AccordionSummary>
-                <AccordionDetails>
+                </AccordionSummary> */}
+                <Collapse>
                 <div className="column">
                 <div className="input-box">
                   <label className="label-form">Full Name</label>
@@ -255,18 +283,18 @@ function RegisterPage(){
                   )}
                 </div>
                 <div className="input-box">
-                  <label className="label-form">Address</label>
+                  <label className="label-form">Address(city)</label>
                   <input
                     type="text"
-                    placeholder="Enter street address"
-                    {...register("address")}
+                    placeholder="Enter a city"
+                    {...register("city")}
                     onBlur={(event: any) => {
-                      setValue("address", event.target.value);
+                      setValue("city", event.target.value);
                     }}
                   />
-                  {errors.address?.type === "required" && (
+                  {errors.city?.type === "required" && (
                     <p role="alert" className="error-message">
-                      *Address is required
+                      *City is required
                     </p>
                   )}
                 </div>
@@ -305,14 +333,14 @@ function RegisterPage(){
                   )}
                 </div>
               </div>
-                </AccordionDetails>
-              </Accordion>
+                </Collapse>
+              </Collapse>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
+              <Collapse>
+                {/* <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
                 Credential information
-                </AccordionSummary>
-                <AccordionDetails>
+                </AccordionSummary> */}
+                <Collapse>
               <div className="input-box">
                 <label className="label-form">Email Address</label>
                 <input
@@ -372,14 +400,14 @@ function RegisterPage(){
                   )}
                 </div>
               </div>
-              </AccordionDetails>
-              </Accordion>
+              </Collapse>
+              </Collapse>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
+              <Collapse>
+                {/* <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
                 Positions' information
-                </AccordionSummary>
-                <AccordionDetails>
+                </AccordionSummary> */}
+                <Collapse>
               <label className="label-form" style={{ textAlign: "left" }}>
                 Register yourself like
               </label>
@@ -500,14 +528,14 @@ function RegisterPage(){
                   </p>
                 )}
               </div>
-              </AccordionDetails>
-              </Accordion>
+              </Collapse>
+              </Collapse>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
+              <Collapse>
+                {/* <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
                 Photos (optional)
-                </AccordionSummary>
-                <AccordionDetails>
+                </AccordionSummary> */}
+                <Collapse>
               <div className="column">
                 <div>
                   {/* <label className="label-form">Upload your photo</label>
@@ -553,8 +581,8 @@ function RegisterPage(){
                 )} */}
                 </div>
               </div>
-              </AccordionDetails>
-              </Accordion>
+              </Collapse>
+              </Collapse>
 
               <button>Submit</button>
             </form>

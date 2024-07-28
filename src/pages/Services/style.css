@@ -8,7 +8,7 @@
 #filter {
     color: black;
     display: inline-block;
-    padding: auto 10% 0 20%;
+  padding: auto 10% 0 20%;
     margin-left: 9%;
     width: 20%;
 }
@@ -22,4 +22,48 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+#topbar { 
+  color: white;
+}
+
+.fl_left {
+  float: left;
+}
+
+.fl_right {
+  float: right;
+}
+
+.card-style {
+  width: '80%';
+  box-shadow: 6px 5px 30px rgba(0, 0, 0, 0.5);
+}
+
+.filter-items {
+  gap:5px;
+  display: inline-grid;
+}
+
+.filterByCategoriesBtn {
+  position: absolute;
+  margin-right: 7%;
+  right: 0;
+  top: 15%;
+  border-radius: 30px;
+  padding: 20px 35px;
+  color: white;
+  background-color: black;
+  font-size: 16px;
+}
+
+.card-style > .ant-card-body {
+  background-color: rgb(243, 243, 243);
+}
+
+.detailsBtn {
+  margin-top: 20px;
+  background-color: black;
+  color: white;
 }

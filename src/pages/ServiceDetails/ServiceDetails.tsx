@@ -1,7 +1,5 @@
-import '../Services/star.css';
 import '../Services/style.css';
 import './style.css'; 
-import './star.css';
 
 const ServiceDetails : React.FC =  () => {
 return(

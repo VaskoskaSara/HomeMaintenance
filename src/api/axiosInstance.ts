@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-export const api = axios.create({
- baseURL: 'http://localhost:5022',
+export const apiPost = axios.create({
+ baseURL: 'https://localhost:7029',
  transformRequest: [(data) => {
     if(data !== undefined){
     return data.data}}],
@@ -13,3 +13,17 @@ export const api = axios.create({
   //  'Access-Control-Allow-Headers': 'Content-Type'
  }
 });
+
+export const apiJson = axios.create({
+   baseURL: 'https://localhost:7029',
+   transformRequest: [(data) => {
+      if(data !== undefined){
+      return JSON.stringify(data.data); }}],
+   headers: {
+    //  'Accept': 'application/json',
+     'Content-Type': 'application/json',
+    //  'Access-Control-Allow-Origin': '*',
+    //  'Access-Control-Allow-Methods':'GET, POST, OPTIONS',
+    //  'Access-Control-Allow-Headers': 'Content-Type'
+   }
+  });

@@ -14,5 +14,6 @@
       "@hookform/resolvers/yup": ["node_modules/@hookform/resolvers/yup"]
     }
   },
-  "include": ["./src/**/*", "babel.config.js", "node_modules"]
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules"]
 }

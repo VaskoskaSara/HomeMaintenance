@@ -1,101 +1,203 @@
+import { Avatar, Button, Card, Carousel, Col, Layout, Menu, Row } from "antd";
+import { Content, Footer, Header } from "antd/es/layout/layout";
 import React from "react";
-import './style/style.css';
+import './style.css';
+import Meta from "antd/es/card/Meta";
+import { ArrowRightOutlined } from "@ant-design/icons";
+import Title from "antd/es/typography/Title";
 
+export const menuItems = [
+  {
+    key: 'home',
+    label: (
+      <span className="menu-item">
+      <a href="/" target="_blank" rel="noopener noreferrer">
+        Home
+      </a>
+      </span>
+    ),
+  },
+  {
+    key: 'services',
+    label: (
+      <span className="menu-item">
+      <a href="/services" target="_blank" rel="noopener noreferrer">
+        Services
+      </a>
+      </span>
+    ),
+  },
+  {
+    key: 'contact',
+    label: (
+      <span className="menu-item">
+      <a href="/contact" target="_blank" rel="noopener noreferrer">
+        Contact
+      </a>
+      </span>
+    ),
+  },
+  {
+    key: 'avatar',
+    label: (
+      <Avatar>U</Avatar>
+    ),
+  }
+]
 
-const HomePage: React.FC = () => {
-return(
-<div  className="bgded" style={{backgroundColor: 'black'}}> 
-<div className="header">
-  <div  className="wrapper row0">
-    <div id="topbar"  className="hoc clear">
-      <div  className="fl_left"> 
-        <ul  className="nospace">
-          <li><i  className="fas fa-phone rgtspace-5"></i> +00 (123) 456 7890</li>
-          <li><i  className="far fa-envelope rgtspace-5"></i> homeMaintenance@hotmail.com</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div  className="wrapper row1">
-    <header id="header"  className="hoc clear">
-      <div id="logo"  className="fl_left"> 
-        <h1><a href="index.html">HOME MAINTENANCE</a></h1> 
-      </div>
-      <nav id="mainav"  className="fl_right"> 
-        <ul  className="clear">
-          <li  className="active"><a href="/">Home</a></li>
-          <li><a  className="" href="/services">Services</a>
-          </li>
-          <li><a  className="drop" href="/contact">Contact</a>
-          </li>
-          <li><a href="#" title="Language"><i  className="fas fa-globe"></i> 
-           <ul>
-              <li><a href="pages/gallery.html">Gallery</a></li>
-            </ul>
-          </a></li>
-          <li><a href="#" title="Login"><i  className="fas fa-sign-in-alt"></i></a>
-          </li>
-          <li><a href="#" title="Sign Up"><i  className="fas fa-edit"></i></a>
-          </li>
-        </ul>
-      </nav>
-    </header>
-  </div>
-  </div>
-  <div id="pageintro" className="hoc clear home-image"> 
-    <article>
-      <h3  className="heading">You are on right place because we make your life easier. Join us.</h3>
-      <p>Looking for someone to complete an obligation in your home?</p>
-      <footer>
-        <ul  className="nospace inline pushright">
-          <li><a  className="btn" href="/services">Explore services</a></li>
-        </ul>
-      </footer>
-    </article>
-  </div>
-  <div style={{background: '#f4f3ee', color: '#434040'}}>
-
-    <h1 style={{fontFamily: 'Verdana', paddingTop: '60px', textAlign: 'center'}}>
-      You want to join us like employee?
-      </h1>
-      <div className="group btmspace-50 demo" style={{display: 'flex', background: '#f4f3ee', gap: '200px', margin: '100px 0', paddingBottom: '100px'}}>
-        <div className="first" style={{background:'white'}}>
-        <div className="card" style={{background:'white', paddingBottom: '30px'}}>
-  <img className="card-img-top" style={{padding: '20px', margin: '0 auto', width: '50%', display: 'block'}} src="https://images.unsplash.com/photo-1611641613359-f698d54566dc?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2l0eSUyMGJ1aWxkaW5nfGVufDB8fDB8fHww" alt="Card image cap" />
-  <div className="card-body">
-    <h5 className="card-title">Register yourself like business</h5>
-   {/* <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> */}
-   <a href="#" style={{color: '#2A53F6'}}>GO TO  <i className='fas fa-arrow-right'></i></a>
-  </div>
-</div>
+const HomePage: React.FC = () => (
+  <div className="bgded" style={{ backgroundColor: 'black' }}>
+    <Layout>
+      <Header style={{backgroundColor: "black"}}>
+        <h1 style={{ flex: 1, minWidth: 0, float: "left", color: "white", fontFamily: "" }}>HOME MAINTENANCE</h1>
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          defaultSelectedKeys={['1']}
+          items={menuItems}
+          style={{ backgroundColor: "black", float:"right" }} />
+      </Header>
+      <Layout>
+        <Content>
+          <Carousel effect="fade" autoplay>
+            <div style={{ position: 'relative', textAlign: 'center' }}>
+              <img
+                src="https://th.bing.com/th/id/R.42274ae040c301e4c1125aa18c0beefb?rik=7JxGSMB1j6Msmg&pid=ImgRaw&r=0"
+                alt="Slide 1"
+                style={{ width: '100%', height: '700px', display: 'block' }} />
+              <div style={{
+                position: 'absolute',
+                bottom: '11%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                color: '#fff',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                padding: '10px',
+                borderRadius: '5px',
+                fontSize: '18px'
+              }}>
+                <article>
+                  <h3 className="heading">You are on right place because we make your life easier. Join us.</h3>
+                  <p>Looking for someone to complete an obligation in your home?</p>
+                  <footer style={{ textAlign: "center", marginTop: "15px" }}>
+                    <Button type="primary" size="large" href="/services" style={{ backgroundColor: "darkgoldenrod" }}>Explore services</Button>
+                  </footer>
+                </article>
+              </div>
+            </div>
+            <div style={{ position: 'relative', textAlign: 'center' }}>
+              <img
+                src="https://cdn.smartstuff.howstuffworks.com/smartstuffhowstuffworks/wp-content/uploads/2021/03/smartstuff-handyman.jpg"
+                alt="Slide 2"
+                style={{ width: '100%', height: '700px', display: 'block' }} />
+              <div style={{
+                position: 'absolute',
+                bottom: '11%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                color: '#fff',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                padding: '10px',
+                borderRadius: '5px',
+                fontSize: '18px'
+              }}>
+                <article>
+                  <h3 className="heading">You are on right place because we make your life easier. Join us.</h3>
+                  <p>Looking for someone to complete an obligation in your home?</p>
+                  <footer style={{ textAlign: "center", marginTop: "15px" }}>
+                    <Button type="primary" size="large" href="/services" style={{ backgroundColor: "darkgoldenrod" }}>Explore services</Button>
+                  </footer>
+                </article>
+              </div>
+            </div>
+            <div style={{ position: 'relative', textAlign: 'center' }}>
+              <img
+                src="https://drpipe.ca/wp-content/uploads/2023/07/prepare-swimming-pool-1024x683.jpg"
+                alt="Slide 3"
+                style={{ width: '100%', height: '700px', display: 'block' }} />
+              <div style={{
+                position: 'absolute',
+                bottom: '11%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                color: '#fff',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                padding: '10px',
+                borderRadius: '5px',
+                fontSize: '18px'
+              }}>
+                <article>
+                  <h3 className="heading">You are on right place because we make your life easier. Join us.</h3>
+                  <p>Looking for someone to complete an obligation in your home?</p>
+                  <footer style={{ textAlign: "center", marginTop: "15px" }}>
+                    <Button type="primary" size="large" href="/services" style={{ backgroundColor: "darkgoldenrod" }}>Explore services</Button>
+                  </footer>
+                </article>
+              </div>
+            </div>
+            <div style={{ position: 'relative', textAlign: 'center' }}>
+              <img
+                src="https://th.bing.com/th/id/OIP.kHg9Yd1XDYlRTVdu0chkDwHaE8?rs=1&pid=ImgDetMain"
+                alt="Slide 4"
+                style={{ width: '100%', height: '700px', display: 'block' }} />
+              <div style={{
+                position: 'absolute',
+                bottom: '11%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                color: '#fff',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                padding: '10px',
+                borderRadius: '5px',
+                fontSize: '18px'
+              }}>
+                <article>
+                  <h3 className="heading">You are on right place because we make your life easier. Join us.</h3>
+                  <p>Looking for someone to complete an obligation in your home?</p>
+                  <footer style={{ textAlign: "center", marginTop: "15px" }}>
+                    <Button type="primary" size="large" href="/services" style={{ backgroundColor: "darkgoldenrod" }}>Explore services</Button>
+                  </footer>
+                </article>
+              </div>
+            </div>
+          </Carousel>
+          <Row gutter={200} justify="center" style={{ padding: "4% 0" }}>
+          <Title level={2} style={{marginBottom: "3%"}}>You want to join us like employee?</Title>
+          <Row className="row-cards">
+            <Col className="width-40">
+              <Card
+                hoverable
+                className="card"
+                cover={<img alt="example" src="https://th.bing.com/th/id/OIP.uF5NZ8-FFWZfpNF2u33dygHaEW?w=570&h=335&rs=1&pid=ImgDetMain" />}
+              >
+                <Meta title="Register yourself like individual/bussiness" />
+                <Button icon={<ArrowRightOutlined />} iconPosition="end" style={{ marginTop: "40px" }}>GO TO</Button>
+              </Card>
+            </Col>
+            <Col className="width-40">
+              <Card
+                hoverable
+                className="card"
+                cover={<img alt="example" src="https://cnectgpo.com/wp-content/uploads/2023/11/become-a-member-header-image_Compressed.jpg" /> }
+              >
+                <Meta title="Register yourself like customer" />
+                <Button icon={<ArrowRightOutlined />} iconPosition="end" style={{ marginTop: "40px" }}>GO TO</Button>
+              </Card>
+            </Col>
+            </Row>
+          </Row>
+        </Content>
+      </Layout>
+      <Footer style={{height: "450px", backgroundColor:"black", color: "white", display: "flex", justifyContent:"center", flexDirection:"column", alignItems: "center", gap: "20px"}}>
+        <Title style={{color:"white"}}>Stay updated.</Title>
+        <p>Get notified of new services from your inbox.</p>
+        <div style={{display:"flex", gap:"30px", alignItems: "center", marginLeft:"10%"}}>
+        <input type="email" name="email" placeholder="Enter your email" style={{ width: '700px', color: 'grey', paddingLeft: '10px', borderRadius: "5px" }} />
+        <Button size="large">Subscribe</Button>
         </div>
-        <div>
-        <div className="card" style={{background:'white', paddingBottom: '30px'}}>
-  <img className="card-img-top" style={{padding: '20px', margin: '0 auto', width: '50%', display: 'block'}} src="https://images.unsplash.com/photo-1611641613359-f698d54566dc?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2l0eSUyMGJ1aWxkaW5nfGVufDB8fDB8fHww" alt="Card image cap" />
-  <div className="card-body">
-    <h5 className="card-title">Register yourself like individual</h5>
-    {/* <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> */}
-    <a href="#" style={{color: '#2A53F6'}}>GO TO  <i className='fas fa-arrow-right'></i>
-</a>
+      </Footer>
+    </Layout>
   </div>
-</div>
-      </div>
-      </div>
-  </div>
-
-  <div id="pageintro" className="hoc clear"> 
-    <article>
-      <h3  className="heading">Stay updated.</h3>
-      <p>Get notified of new services from your inbox.</p>
-      <footer style={{display: 'inline-flex', gap:'20px', width: '50%', marginLeft: '30px'}}>
-        <input type="email" name="email" placeholder="Enter your email" style={{width: '700px', color: 'grey', paddingLeft: '10px'}} />
-          <a href="#" style={{color: 'white', backgroundColor: '#676768', padding: '8px 18px 10px', borderRadius: '12px'}}>Subscribe</a>
-      </footer>
-    </article>
-  </div>
-
-</div>
-)
-};
+);
 
 export default HomePage;

@@ -1,23 +1,20 @@
-import "./style.css";
-import { ChangeEvent, MutableRefObject, useEffect, useRef, useState } from "react";
-import { ApiResponse, Position, UserType } from "./RegisterPage.props";
-import  useSWR from "swr";
-import useSWRMutation from 'swr/mutation'
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import { useLocation } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getFetcher } from "src/api/apiQuery";
-import { postFormFetcher, postJsonFetcher } from "src/api/apiCommand";
-import  validator from 'validator';
-import { Button, Collapse, DatePicker, Form, Input, Layout, Menu, Steps } from "antd";
+import { Collapse, Layout, Menu } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
+import { ChangeEvent, MutableRefObject, useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useLocation } from "react-router-dom";
+import { postFormFetcher, postJsonFetcher } from "src/api/apiCommand";
+import { getFetcher } from "src/api/apiQuery";
+import useSWR from "swr";
+import useSWRMutation from 'swr/mutation';
+import validator from 'validator';
+import * as yup from "yup";
 import { menuItems } from "../HomePage/HomePage";
-import Title from "antd/es/typography/Title";
-import moment from "moment";
-import { format } from "date-fns";
-import { RegisterForm } from "./RegisterForm";
-import { LoginForm } from "./LoginForm";
+import { LoginForm } from "./components/LoginForm";
+import { RegisterForm } from "./components/RegisterForm";
+import { ApiResponse, Position, UserType } from "./RegisterPage.props";
+import "./style.css";
 
 const loginSchema = yup
 .object()

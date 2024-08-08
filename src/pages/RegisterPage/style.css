@@ -366,3 +366,31 @@ input {
 .collapsed .down {
   transform: rotate(-90deg);
 } 
+
+.general-data .ant-input-number, .ant-picker{
+  width: 100%;
+}
+
+.general-data input, .position-data input, .ant-select, .ant-radio-group {
+  height: 40px;
+}
+
+.general-data .ant-picker {
+  height: 42px;
+}
+
+.steps-action {
+  display: flex;
+  gap: 20px;
+}
+
+.position-data .ant-input-number {
+  width: 100%;
+}
+
+.credential-data input{
+  height: 40px;
+}
+.ant-input-affix-wrapper {
+  height: 45px;
+}

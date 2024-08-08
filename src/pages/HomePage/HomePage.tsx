@@ -164,7 +164,7 @@ const HomePage: React.FC = () => (
           <Row gutter={200} justify="center" style={{ padding: "4% 0" }}>
           <Title level={2} style={{marginBottom: "3%"}}>You want to join us like employee?</Title>
           <Row className="row-cards">
-            <Col className="width-40">
+            <Col className="width-30">
               <Card
                 hoverable
                 className="card"
@@ -174,7 +174,7 @@ const HomePage: React.FC = () => (
                 <Button icon={<ArrowRightOutlined />} iconPosition="end" style={{ marginTop: "40px" }}>GO TO</Button>
               </Card>
             </Col>
-            <Col className="width-40">
+            <Col className="width-30">
               <Card
                 hoverable
                 className="card"

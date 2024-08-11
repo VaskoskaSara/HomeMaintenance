@@ -1,10 +1,12 @@
 import { Button, Form, Input } from "antd";
 import Title from "antd/es/typography/Title";
+import "../../style.css";
 
 export function LoginForm(){
 
-    return(  <div style={{width: "30%"}}>
+    return(  <div>
         <Title level={2}>Login</Title>
+        <div className="login-container">
         <Form>
           <Form.Item>
             <Input placeholder="Email address" />
@@ -16,5 +18,6 @@ export function LoginForm(){
             <Button type="primary" htmlType="submit">Submit</Button>
           </Form.Item>
         </Form>
+        </div>
       </div>)
 }

@@ -3,7 +3,7 @@ import { Routes, Route, BrowserRouter as  Router } from "react-router-dom";
 import HomePage from "../../pages/HomePage/HomePage";
 import Services from "../../pages/Services/Services";
 import ServiceDetails from "../../pages/ServiceDetails/ServiceDetails";
-import RegisterPage from "../../pages/RegisterPage/RegisterPage";
+import RegisterPage from "src/pages/RegisterPage/RegisterAndLoginPage";
 
 const AppRoutes: () => JSX.Element = () => {
     

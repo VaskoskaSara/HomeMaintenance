@@ -9,8 +9,10 @@ import {
   Radio,
   Row,
   Select,
+  Spin,
   Steps,
   Upload,
+  UploadFile,
 } from "antd";
 import Title from "antd/es/typography/Title";
 import dayjs from "dayjs";
@@ -18,8 +20,8 @@ import { useState } from "react";
 import { getFetcher } from "src/api/apiQuery";
 import useSWR from "swr";
 import validator from "validator";
-import { ApiResponse, Position } from "../RegisterPage.props";
-import "../style.css";
+import { ApiResponse, Position } from "../../RegisterPage.props";
+import "../../style.css";
 import { UploadOutlined } from "@ant-design/icons";
 import { postFormFetcher } from "src/api/apiCommand";
 import useSWRMutation from "swr/mutation";
@@ -39,7 +41,23 @@ export function RegisterForm() {
     "/api/user/positions",
     getFetcher
   );
+  const [profileImage, setProfileImage] =  useState<File | null>(null);
 
+  const handleFileChange = ({ fileList }: { fileList: UploadFile[] }) => {
+    if (fileList.length > 0) {
+      const newFile = fileList[0].originFileObj as File;
+      setProfileImage(newFile);
+    } else {
+      setProfileImage(null);
+    }
+  };
+
+  const [photos, setPhotos] =  useState<UploadFile[]>([]);
+
+  const handlePhotosChange = ({ fileList }: { fileList: UploadFile[] }) => {
+    setPhotos(fileList);
+  };
+  
   const [selectedPaymentOption, setSelectedPaymentOption] = useState<number | undefined>();
   const [selectedPosition, setSelectedPosition] = useState<
     string | undefined
@@ -96,7 +114,7 @@ export function RegisterForm() {
     const allValues = form.getFieldsValue(true) as RegisterFormObject;
 
     const filteredModel = Object.entries(allValues)
-      .filter(([key]) => key !== "photos")
+      .filter(([key]) => key !== "photos" && key !== "avatar")
       .reduce((acc, [key, value]) => {
         acc[key] = value;
         return acc;
@@ -108,13 +126,15 @@ export function RegisterForm() {
       }
     }
 
-    const fileList = allValues.pictures;
-
-    if (fileList) {
-      for (let i = 0; i < fileList.length; i++) {
-        formDataToSend.append("photos", fileList[i]);
-      }
+     if (profileImage) {
+      formDataToSend.append('avatar', profileImage);
     }
+
+    photos.forEach(file => {
+      if (file.originFileObj) {
+        formDataToSend.append('photos', file.originFileObj);
+      }
+    });
 
     trigger(formDataToSend);
     console.log(allValues);
@@ -306,7 +326,7 @@ export function RegisterForm() {
                         label="Write down another position"
                         rules={[
                           {
-                            required: true,
+                            required: selectedPosition === null,
                             message: "Write down your position",
                           },
                         ]}
@@ -386,41 +406,38 @@ export function RegisterForm() {
       title: "Photos",
       content: (
         <Form layout="vertical" form={form}>
-          <Form.Item
-            label="Upload your profile picture"
-            name="profileImage"
-            valuePropName="profileImage"
-            getValueFromEvent={(e) => e && e.fileList}
-            rules={[{ required: true, message: "Please upload an image!" }]}
-          >
-            <Upload
-              name="profileImage"
-              listType="picture"
-              maxCount={1}
-              showUploadList={{ showRemoveIcon: true }}
-            >
-              <Button icon={<UploadOutlined />}>Upload Image</Button>
-            </Upload>
-          </Form.Item>
+         <Form.Item
+         label="Upload your profile picture"
+          name="avatar"
+          getValueFromEvent={({ fileList }: { fileList: UploadFile[] }) => fileList[0]}
+      >
+        <Upload
+          name="avatar"
+          fileList={profileImage ? [{ uid: '1', name: profileImage.name, status: 'done', url: URL.createObjectURL(profileImage) }] : []}
+          onChange={handleFileChange}
+          listType="picture"
+          maxCount={1}
+          showUploadList={{ showRemoveIcon: true }}
+        >
+          <Button icon={<UploadOutlined />}>Upload Image</Button>
+        </Upload>
+      </Form.Item>
 
           <Form.Item
             label="Upload Multiple Images (max 10)"
-            name="multipleImages"
-            valuePropName="fileList"
-            getValueFromEvent={(e) => e && e.fileList}
-            rules={[{ required: true, message: "Please upload images!" }]}
+            name="photos"
+            getValueFromEvent={({ fileList }: { fileList: UploadFile[] }) => fileList}
           >
             <Upload
-              name="multipleImages"
+              name="photos"
+              fileList={photos}
+              onChange={handlePhotosChange}
               listType="picture-card"
               maxCount={10}
               showUploadList={{ showRemoveIcon: true }}
               multiple
             >
-              <div>
-                <UploadOutlined />
-                <div className="ant-upload-text">Upload</div>
-              </div>
+              <Button icon={<UploadOutlined />}>Upload Image</Button>
             </Upload>
           </Form.Item>
         </Form>
@@ -449,8 +466,12 @@ export function RegisterForm() {
   );
 
   return (
-    <div style={{ width: "40%" }}>
+    <div>
       <Title level={2}>Register form</Title>
+      <div className="loading-container">
+      {isLoading ? 
+      (<Spin size="large" tip="Loading..."  />) : (
+        <>
       <Steps current={current} size="small" style={{ marginBottom: "24px" }}>
         {steps.map((item) => (
           <Step key={item.title} title={item.title} />
@@ -470,6 +491,10 @@ export function RegisterForm() {
           </Button>
         </div>
       </Form>
+      </>
+      )
+      }
+      </div>
     </div>
   );
 }

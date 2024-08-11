@@ -1,4 +1,4 @@
-import { UserType } from "../RegisterPage.props";
+import { UserType } from "../../RegisterPage.props";
 
 export enum PaymentType {
     Hourly = 1,
@@ -18,7 +18,7 @@ export interface RegisterFormObject {
     paymentType: PaymentType | null;
     price: number | null;
     experience: number | null;
-    profileImage: File;
-    pictures: File[];
+    avatar: File;
+    photos: File[];
     newPosition: string | null;
 }

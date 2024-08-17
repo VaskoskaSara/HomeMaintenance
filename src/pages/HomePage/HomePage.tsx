@@ -1,62 +1,16 @@
-import { Avatar, Button, Card, Carousel, Col, Layout, Menu, Row } from "antd";
-import { Content, Footer, Header } from "antd/es/layout/layout";
-import React from "react";
-import './style.css';
-import Meta from "antd/es/card/Meta";
 import { ArrowRightOutlined } from "@ant-design/icons";
+import { Button, Card, Carousel, Col, Layout, Row } from "antd";
+import Meta from "antd/es/card/Meta";
+import { Content } from "antd/es/layout/layout";
 import Title from "antd/es/typography/Title";
+import React from "react";
+import AppWrapper from "../common/AppWrapper/AppWrapper";
+import './style.css';
 
-export const menuItems = [
-  {
-    key: 'home',
-    label: (
-      <span className="menu-item">
-      <a href="/" target="_blank" rel="noopener noreferrer">
-        Home
-      </a>
-      </span>
-    ),
-  },
-  {
-    key: 'services',
-    label: (
-      <span className="menu-item">
-      <a href="/services" target="_blank" rel="noopener noreferrer">
-        Services
-      </a>
-      </span>
-    ),
-  },
-  {
-    key: 'contact',
-    label: (
-      <span className="menu-item">
-      <a href="/contact" target="_blank" rel="noopener noreferrer">
-        Contact
-      </a>
-      </span>
-    ),
-  },
-  {
-    key: 'avatar',
-    label: (
-      <Avatar>U</Avatar>
-    ),
-  }
-]
 
 const HomePage: React.FC = () => (
   <div className="bgded" style={{ backgroundColor: 'black' }}>
-    <Layout>
-      <Header style={{backgroundColor: "black"}}>
-        <h1 style={{ flex: 1, minWidth: 0, float: "left", color: "white", fontFamily: "" }}>HOME MAINTENANCE</h1>
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={['1']}
-          items={menuItems}
-          style={{ backgroundColor: "black", float:"right" }} />
-      </Header>
+    <AppWrapper>
       <Layout>
         <Content>
           <Carousel effect="fade" autoplay>
@@ -188,15 +142,7 @@ const HomePage: React.FC = () => (
           </Row>
         </Content>
       </Layout>
-      <Footer style={{height: "450px", backgroundColor:"black", color: "white", display: "flex", justifyContent:"center", flexDirection:"column", alignItems: "center", gap: "20px"}}>
-        <Title style={{color:"white"}}>Stay updated.</Title>
-        <p>Get notified of new services from your inbox.</p>
-        <div style={{display:"flex", gap:"30px", alignItems: "center", marginLeft:"10%"}}>
-        <input type="email" name="email" placeholder="Enter your email" style={{ width: '700px', color: 'grey', paddingLeft: '10px', borderRadius: "5px" }} />
-        <Button size="large">Subscribe</Button>
-        </div>
-      </Footer>
-    </Layout>
+    </AppWrapper>
   </div>
 );
 

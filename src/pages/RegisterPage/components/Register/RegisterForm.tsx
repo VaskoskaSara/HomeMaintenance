@@ -6,6 +6,7 @@ import {
   Input,
   InputNumber,
   message,
+  notification,
   Radio,
   Row,
   Select,
@@ -29,6 +30,7 @@ import { PaymentType, RegisterFormObject } from "./RegisterForm.props";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { parsePhoneNumberFromString, isValidNumber } from 'libphonenumber-js';
+import { useNavigate } from "react-router-dom";
 
 const { Step } = Steps;
 
@@ -36,6 +38,8 @@ export function RegisterForm() {
   const [current, setCurrent] = useState(0);
   const [form] = Form.useForm();
   const { Option } = Select;
+
+  const navigate = useNavigate();
 
   const { data: positions, isLoading } = useSWR<ApiResponse<Position[]>>(
     "/api/user/positions",
@@ -136,8 +140,25 @@ export function RegisterForm() {
       }
     });
 
-    trigger(formDataToSend);
-    console.log(allValues);
+      trigger(formDataToSend).then(() => {
+        notification.success({
+          message: 'Registration Successful',
+          description: 'You have successfully registered. Welcome!',
+          placement: 'topRight',
+          duration: 5
+        });
+  
+        setTimeout(() => {
+          navigate('/');
+        }, 5000);
+      }).catch((ex) => {
+        notification.error({
+          message: 'Some error was happened',
+          description: 'You haven\'t successfully registered. Please try again.',
+          placement: 'topRight',
+          duration: 5
+        });
+      });
   };
 
   const steps = [
@@ -185,11 +206,12 @@ export function RegisterForm() {
                 ]}
               >
                  <PhoneInput
-          international
-          defaultCountry="MK"
-          placeholder="Enter your phone number"
-          value={form.getFieldValue('phoneNumber')}
-          onChange={(value) => form.setFieldsValue({ phoneNumber: value })}
+                 className="phoneInput"
+                 international
+                 defaultCountry="MK"
+                 // placeholder="Enter your phone number"
+                 value={form.getFieldValue('phoneNumber')}
+                 onChange={(value) => form.setFieldsValue({ phoneNumber: value })}
         />
               </Form.Item>
             </Col>
@@ -211,7 +233,9 @@ export function RegisterForm() {
                   },
                 ]}
               >
-                <DatePicker />
+                <DatePicker  
+                format="DD-MM-YYYY"
+                placeholder="Select or enter date (DD-MM-YYYY)" />
               </Form.Item>
             </Col>
           </Row>
@@ -405,7 +429,7 @@ export function RegisterForm() {
     {
       title: "Photos",
       content: (
-        <Form layout="vertical" form={form}>
+        <Form layout="vertical" form={form} className="photos">
          <Form.Item
          label="Upload your profile picture"
           name="avatar"

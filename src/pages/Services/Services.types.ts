@@ -7,3 +7,8 @@ export type Employee = {
     price: number;
     avatar: string;
 }
+
+export interface ICityOption {
+    value: string;
+    label: string;
+}

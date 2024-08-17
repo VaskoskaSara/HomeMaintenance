@@ -129,13 +129,6 @@ body {
   background: #ededed;
 }
 
-input, button {
-  border: none;
-  outline: none;
-  background: none;
-  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-}
-
 h2 {
   width: 100%;
   font-size: 26px;
@@ -145,8 +138,6 @@ h2 {
 input {
   display: block;
   width: 100%;
-  margin-top: 5px;
-  padding-bottom: 5px;
   font-size: 16px;
   text-align: center;
 }

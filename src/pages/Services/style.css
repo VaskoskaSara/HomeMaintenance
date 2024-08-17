@@ -67,3 +67,7 @@ input[type=number] {
   background-color: black;
   color: white;
 }
+
+.block {
+  display: block;
+}

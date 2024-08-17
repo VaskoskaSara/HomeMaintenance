@@ -1,15 +1,11 @@
 .container.right-panel-active .sign-in-container {
 	transform: translateX(100%);
-  border-radius: 10px;
 }
 
 .sign-up-container {
-	left: 0;
 	width: 50%;
 	opacity: 0;
 	z-index: 1;
-  overflow-y: auto;
-  border-radius: 10px;
 }
 
 .container.right-panel-active .sign-up-container {
@@ -17,7 +13,6 @@
 	opacity: 1;
 	z-index: 5;
 	animation: show 0.6s;
-  border-radius: 10px;
 }
 
 @keyframes show {
@@ -33,9 +28,6 @@
 }
 
 .overlay-container {
-	position: absolute;
-	top: 0;
-	left: 50%;
 	width: 50%;
 	height: 100%;
 	overflow: hidden;
@@ -105,10 +97,6 @@
 
 .container {
 	background-color: #fff;
-	border-radius: 10px;
-  	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
-			0 10px 10px rgba(0,0,0,0.22);
-	padding: 50px;
 }
 
 .general-data .ant-input-number, .ant-picker{
@@ -146,6 +134,10 @@
   margin: 2%;
 }
 
+.login-container {
+	margin: 2% 12%;
+  }
+
 button:active {
 	transform: scale(0.95) !important;
 }
@@ -160,17 +152,62 @@ button.ghost {
 }
 
 .form-container {
-	position: absolute;
-	top: 0;
-	/* height: 100%; */
-	transition: all 0.6s ease-in-out;
-  border-radius: 10px;
+  transition: all 0.6s ease-in-out;
+  flex: 1;
+  align-self: center;
+  text-align: center;
 }
 
 .sign-in-container {
-	left: 0;
-	z-index: 2;
-  border-radius: 10px;
 	width: 50%;
-  overflow-y: auto;
+	z-index: 2;
+}
+
+.login-label label {
+	width: 120px;
+}
+
+.phoneInput {
+	text-overflow: ellipsis;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #d9d9d9;
+    padding: 0 11px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.phoneInput input {
+	border: none;	
+}
+
+.photos > div:nth-child(1) > div {
+	display: grid;
+	grid-template-columns: auto 1fr;
+}
+
+.photos > div:nth-child(1) > div .ant-upload-list-item-done {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	max-width: 380px;
+	display: flex;
+}
+
+.photos .ant-upload {
+	display: flex;
+}
+
+.photos > div:nth-child(2) > div {
+	display: block;
+}
+
+.photos > div:nth-child(2) > div .ant-upload-select {
+	background-color: white !important;
+	border: none !important;
+}
+
+.photos > div:nth-child(2) > div .ant-upload-list-picture-card {
+	display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
 }

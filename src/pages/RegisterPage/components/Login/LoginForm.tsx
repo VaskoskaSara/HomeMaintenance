@@ -46,17 +46,17 @@ export function LoginForm() {
   return (
     <div>
       <Title level={2}>Login</Title>
-      <div className="login-container">
-        <Form form={form} onFinish={handleFinish} className="login-form">
+      <div className="my-8 mx-12">
+        <Form form={form} onFinish={handleFinish}>
         <Form.Item
             name="email"
             label="Email address"
             rules={[
-              { required: true, message: "*Email address is required" }
+              { required: true, message: "Email address is required" }
             ]}
             className="login-label"
             >
-            <Input placeholder="Email address" className="ant-input-affix-wrapper" />
+            <Input placeholder="Email address" className="h-45" />
           </Form.Item>
           <Form.Item
             name="password"
@@ -66,7 +66,7 @@ export function LoginForm() {
             ]}
            className="login-label"
           >
-            <Input.Password placeholder="Password" className="ant-input-affix-wrapper" />
+            <Input.Password placeholder="Password" className="h-45" />
           </Form.Item>
           <Form.Item>
             <Button 

@@ -5,8 +5,8 @@ const ServiceDetails : React.FC =  () => {
 return(
     <div   className="bgded"  style={{backgroundColor: 'black'}}>
     <div  className="wrapper row0">
-    <div id="topbar"  className="hoc clear">
-      <div  className="fl_left"> 
+    <div className="hoc clear text-white">
+      <div  className="float-left"> 
         <ul  className="nospace">
           <li><i  className="fas fa-phone rgtspace-5"></i> +00 (123) 456 7890</li>
           <li><i  className="far fa-envelope rgtspace-5"></i> homeMaintenance@hotmail.com</li>
@@ -16,10 +16,10 @@ return(
   </div>
   <div  className="wrapper row1">
     <header id="header"  className="hoc clear">
-      <div id="logo"  className="fl_left"> 
+      <div id="logo"  className="float-left"> 
         <h1><a href="index.html">HOME MAINTENANCE</a></h1> 
       </div>
-      <nav id="mainav"  className="fl_right"> 
+      <nav id="mainav"  className="float-right"> 
         <ul  className="clear">
           <li ><a href="/">Home</a></li>
           <li><a  className="active" href="/services">Services</a>

@@ -56,22 +56,20 @@ function RegisterPage() {
   return (
     <>
       <AppWrapper>
-        <Content style={{minHeight: 280, display: "flex"}}>
+        <Content className="min-h-[280px] flex">
           <div
-            className="container"
-            id="container"
-            style={{ color: "#170d0d", display: "flex", flex: 1 }}
+           id="container"
+           className="bg-white text-[#170d0d] flex flex-1"
           >
             { isRegisterPage ? (
-            <div className="form-container sign-up-container">
-              <div className="container">
+            <div className="transition-all duration-600 ease-in-out flex-1 self-center text-center sign-up-container">
+              <div className="bg-white">
                 <RegisterForm />
               </div>
             </div> ) :  (
-            <div className="form-container sign-in-container">
+            <div className="transition-all duration-600 ease-in-out flex-1 self-center text-center sign-in-container">
               <div
-                className="container"
-                style={{ textAlign: "left"}}
+                className="bg-white text-left"
               >
                 <LoginForm />
               </div>
@@ -80,7 +78,7 @@ function RegisterPage() {
               <div className="overlay">
                 <div className="overlay-panel overlay-left">
                   <h1>Welcome Back!</h1>
-                  <p style={{ marginBottom: "10px" }}>
+                  <p className="mb-2.5">
                     To keep connected with us please login with your personal
                     info
                   </p>
@@ -88,7 +86,7 @@ function RegisterPage() {
                 </div>
                 <div className="overlay-panel overlay-right">
                   <h1>Hello, Friend!</h1>
-                  <p style={{ marginBottom: "10px" }}>Enter your personal details and start journey with us</p>
+                  <p className="mb-2.5">Enter your personal details and start journey with us</p>
                   <Button id="signUp">Sign Up</Button>
                 </div>
               </div>

@@ -26,7 +26,7 @@ import "../../style.css";
 import { UploadOutlined } from "@ant-design/icons";
 import { postFormFetcher } from "src/api/apiCommand";
 import useSWRMutation from "swr/mutation";
-import { PaymentType, RegisterFormObject } from "./RegisterForm.props";
+import { CustomError, PaymentType, RegisterFormObject } from "./RegisterForm.props";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { parsePhoneNumberFromString, isValidNumber } from 'libphonenumber-js';
@@ -84,6 +84,7 @@ export function RegisterForm() {
   };
 
   const IsPasswordStrong = (rule: any, value: string) => {
+    if (!value) return Promise.resolve();
     if (
       validator.isStrongPassword(value, {
         minLength: 8,
@@ -151,7 +152,7 @@ export function RegisterForm() {
         setTimeout(() => {
           navigate('/');
         }, 5000);
-      }).catch((ex) => {
+      }).catch((ex : CustomError) => {
         notification.error({
           message: 'Some error was happened',
           description: 'You haven\'t successfully registered. Please try again.',
@@ -166,9 +167,7 @@ export function RegisterForm() {
       title: "General Information",
       description: "General Information",
       content: (
-        <Form layout="vertical" form={form} key="general">
-          <Row className="general-data" gutter={16}>
-            <Col span={24}>
+        <Form layout="vertical" form={form} key="general" className="general-data">
               <Form.Item
                 name="fullName"
                 label="Full name"
@@ -176,8 +175,6 @@ export function RegisterForm() {
               >
                 <Input placeholder="Enter full name" />
               </Form.Item>
-            </Col>
-            <Col span={24}>
               <Form.Item
                 name="city"
                 label="City"
@@ -185,7 +182,7 @@ export function RegisterForm() {
               >
                 <Input placeholder="Enter your city" />
               </Form.Item>
-            </Col>
+            <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name="phoneNumber"
@@ -238,7 +235,7 @@ export function RegisterForm() {
                 placeholder="Select or enter date (DD-MM-YYYY)" />
               </Form.Item>
             </Col>
-          </Row>
+            </Row>
         </Form>
       ),
     },
@@ -250,7 +247,7 @@ export function RegisterForm() {
             name="email"
             label="Email address"
             rules={[
-              { required: true, message: "*Email address id required" },
+              { required: true, message: "*Email address is required" },
               { type: "email", message: "Please enter a valid email!" },
             ]}
           >
@@ -288,14 +285,14 @@ export function RegisterForm() {
             label="Register yourself like"
             rules={[{ required: true, message: "User role is required" }]}
           >
-            <Radio.Group style={{ width: "100%", textAlign: "center" }}>
-              <Radio.Button value="1" style={{ width: "33.33%" }}>
+            <Radio.Group className="w-full text-center">
+              <Radio.Button value="1" className="w-[33.33%]">
                 Customer
               </Radio.Button>
-              <Radio.Button value="2" style={{ width: "33.33%" }}>
+              <Radio.Button value="2" className="w-[33.33%]">
                 Individual employee
               </Radio.Button>
-              <Radio.Button value="3" style={{ width: "33.33%" }}>
+              <Radio.Button value="3" className="w-[33.33%]">
                 Business/Group
               </Radio.Button>
             </Radio.Group>
@@ -379,10 +376,10 @@ export function RegisterForm() {
                           placeholder="Select payment type"
                           onChange={handleSelectPaymentTypeChange}
                         >
-                          <Option value={PaymentType.Hourly}>hourly</Option>
-                          <Option value={PaymentType.Overall}>overall</Option>
+                          <Option value={PaymentType.Hourly}>Hourly</Option>
+                          <Option value={PaymentType.Overall}>Overall</Option>
                           <Option value={PaymentType.Contract}>
-                            by contract
+                            By contract
                           </Option>
                         </Select>
                       </Form.Item>
@@ -406,19 +403,37 @@ export function RegisterForm() {
                       </Form.Item>
                     </Col>
                   </Row>
-
+                  <Row gutter={16}>
+                  <Col span={12}>
                   <Form.Item
                     name="experience"
-                    label="Experince(in months)"
+                    label="Experience (in months)"
                     rules={[
                       { required: true, message: "*Experience required" },
                     ]}
                   >
                     <InputNumber
                       changeOnWheel
-                      placeholder="Enter experince in months"
+                      placeholder="Enter experience in months"
                     />
                   </Form.Item>
+                  </Col>
+                  <>
+                  {form.getFieldValue("userType") === "3" ? (
+                  <Col span={12}>
+                  <Form.Item
+                    name="numberOfEmployees"
+                    label="Number of employees"
+                  >
+                    <InputNumber
+                      changeOnWheel
+                      placeholder="Enter number of employees"
+                    />
+                  </Form.Item>
+                  </Col>
+              ) : (<></>)}
+                  </>
+                  </Row>
                 </>
               ) : null
             }
@@ -427,7 +442,7 @@ export function RegisterForm() {
       ),
     },
     {
-      title: "Photos",
+      title: "Optional fields",
       content: (
         <Form layout="vertical" form={form} className="photos">
          <Form.Item
@@ -445,7 +460,7 @@ export function RegisterForm() {
         >
           <Button icon={<UploadOutlined />}>Upload Image</Button>
         </Upload>
-      </Form.Item>
+        </Form.Item>
 
           <Form.Item
             label="Upload Multiple Images (max 10)"
@@ -464,6 +479,12 @@ export function RegisterForm() {
               <Button icon={<UploadOutlined />}>Upload Image</Button>
             </Upload>
           </Form.Item>
+          <Form.Item
+        label="Description"
+        name="description"
+      >
+        <Input.TextArea rows={4} placeholder="Enter a brief description" />
+      </Form.Item>
         </Form>
       ),
     },
@@ -492,18 +513,18 @@ export function RegisterForm() {
   return (
     <div>
       <Title level={2}>Register form</Title>
-      <div className="loading-container">
+      <div className="inline-grid justify-center items-center m-[2%] max-w-[500px] w-full">
       {isLoading ? 
       (<Spin size="large" tip="Loading..."  />) : (
         <>
-      <Steps current={current} size="small" style={{ marginBottom: "24px" }}>
+      <Steps current={current} size="small" className="mb-6">
         {steps.map((item) => (
           <Step key={item.title} title={item.title} />
         ))}
       </Steps>
       <Form form={form} layout="vertical">
-        <div className="steps-content">{steps[current].content}</div>
-        <div className="steps-action">
+        <div>{steps[current].content}</div>
+        <div className="flex gap-[20px]">
           <Button disabled={current === 0} onClick={prev}>
             Previous
           </Button>

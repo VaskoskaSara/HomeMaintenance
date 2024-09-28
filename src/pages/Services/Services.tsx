@@ -76,7 +76,7 @@ const Services: React.FC = () => {
       if (isLoadingEmployees || isLoading || isCitiesLoading) {
         return (
           <AppWrapper>
-            <Content style={{ alignSelf: "center", alignContent: "center" }}>
+            <Content className="self-center content-center">
               <Spin size="large" tip="Loading..." />
             </Content>
           </AppWrapper>
@@ -87,20 +87,16 @@ const Services: React.FC = () => {
 
   return (
     <AppWrapper className="block">
-      <div style={{ display: "flex", gap: "20px" }}>
-        <Content style={{ display: "flex" }}>
+      <div className="flex gap-5">
+        <Content className="flex">
           <Sider
             width={400}
-            style={{
-              height: "100%",
-              backgroundColor: "#ededed",
-              padding: "7%",
-            }}
+            className="h-full bg-[#ededed] p-[7%]"
           >
             <div>
               <Title level={4}>Filter by:</Title>
-              <div style={{ display: "inline-grid", gap: "20px" }}>
-                <div className="filter-items">
+              <div className="inline-grid gap-5">
+                <div className="inline-grid gap-1.25">
                   <Typography>Choose by city:</Typography>
                   <Cascader
                     options={cities}
@@ -114,10 +110,10 @@ const Services: React.FC = () => {
                     onClear={() => setCity(null)}
                   />
                 </div>
-                <div className="filter-items">
+                <div className="inline-grid gap-1.25">
                   <Typography>Choose by experince (in months):</Typography>
                   <InputNumber
-                    style={{ width: "auto" }}
+                    className="w-auto"
                     placeholder="Experince"
                     changeOnWheel
                     onChange={(value) =>
@@ -126,7 +122,7 @@ const Services: React.FC = () => {
                     value={experience}
                   />
                 </div>
-                <div className="filter-items">
+                <div className="inline-grid gap-1.25">
                   <Typography>Chose price range:</Typography>
                   <Slider
                     range
@@ -142,35 +138,27 @@ const Services: React.FC = () => {
                     defaultChecked={false}
                     checked={byContract ? byContract : undefined}
                   >
-                    Pokazhi po dogovor
+                    Iskluchi gi tie po dogovor
                   </Checkbox>
                 </div>
               </div>
             </div>
           </Sider>
+          <div className="pt-2 px-5 pb-7 w-full">
           <Button className="filterByCategoriesBtn">
             Filter by categories
           </Button>
-          <Row
-            style={{
-              position: "relative",
-              display: "inline-flex",
-              padding: "7% 5%",
-              gap: "25px",
-              marginTop: "20px",
-            }}
-          >
+          <Row className="relative inline-flex pt-2 px-5 pb-7 gap-6 mt-5">
             {employees?.data.map((employee) => (
               <Col>
                 <Card
-                  style={{ width: "300px" }}
+                  className="w-[250px] w-[80%] shadow-[6px_5px_30px_rgba(0,0,0,0.5)] card-style"
                   hoverable
-                  className="card-style"
                   cover={
                     <img
                       alt="example"
                       src={employee.avatar}
-                      style={{ height: "200px", objectFit: "cover" }}
+                      className="h-[200px] object-cover"
                     />
                   }
                 >
@@ -182,20 +170,21 @@ const Services: React.FC = () => {
                     }
                   </Title>
                   <Rate disabled defaultValue={2} />
-                  <Typography style={{ fontSize: "16px" }}>
+                  <Typography className="text-[16px]">
                     Experience: {employee.experience} months
                   </Typography>
-                  <Typography style={{ fontSize: "16px" }}>
+                  <Typography className="text-[16px]">
                     Payment: {employee.price}/h
                   </Typography>
-                  <Typography style={{ fontSize: "16px" }}>
+                  <Typography className="text-[16px]">
                     City: {employee.city}
                   </Typography>
-                  <Button className="detailsBtn">Details</Button>
+                  <Button className="mt-5 bg-black text-white">Details</Button>
                 </Card>
               </Col>
             ))}
           </Row>
+          </div>
         </Content>
       </div>
     </AppWrapper>

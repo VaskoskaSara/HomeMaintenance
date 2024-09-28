@@ -1,3 +1,4 @@
+import { HttpStatusCode } from "axios";
 import { UserType } from "../../RegisterPage.props";
 
 export enum PaymentType {
@@ -21,4 +22,9 @@ export interface RegisterFormObject {
     avatar: File;
     photos: File[];
     newPosition: string | null;
+}
+
+export interface CustomError {
+    code: HttpStatusCode,
+    message: string;
 }

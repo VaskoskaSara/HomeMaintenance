@@ -171,14 +171,14 @@ export function RegisterForm() {
               <Form.Item
                 name="fullName"
                 label="Full name"
-                rules={[{ required: true, message: "*Full name is required" }]}
+                rules={[{ required: true, message: "Full name is required" }]}
               >
                 <Input placeholder="Enter full name" />
               </Form.Item>
               <Form.Item
                 name="city"
                 label="City"
-                rules={[{ required: true, message: "*City is required" }]}
+                rules={[{ required: true, message: "City is required" }]}
               >
                 <Input placeholder="Enter your city" />
               </Form.Item>
@@ -188,7 +188,7 @@ export function RegisterForm() {
                 name="phoneNumber"
                 label="Phone number"
                 rules={[
-                  { required: true, message: "*Phone number is required" },
+                  { required: true, message: "Phone number is required" },
                   {
                     validator: (_, value) => {
                       const phoneNumber = parsePhoneNumberFromString(value);
@@ -217,7 +217,7 @@ export function RegisterForm() {
                 name="birthDate"
                 label="Birth date"
                 rules={[
-                  { required: true, message: "*Birth date is required" },
+                  { required: true, message: "Birth date is required" },
                   {
                     validator: (_, value) => {
                       if (!value || dayjs(value).isBefore(dayjs(), "day")) {
@@ -247,7 +247,7 @@ export function RegisterForm() {
             name="email"
             label="Email address"
             rules={[
-              { required: true, message: "*Email address is required" },
+              { required: true, message: "Email address is required" },
               { type: "email", message: "Please enter a valid email!" },
             ]}
           >
@@ -312,11 +312,9 @@ export function RegisterForm() {
                         name="positionId"
                         label="Position"
                         rules={[
-                          {
+                          {required: true,
                             validator: (_, value) => {
                               if (value === null || value === undefined) {
-                                return Promise.resolve();
-                              } else if (value === '') {
                                 return Promise.reject(new Error('Position is required'));
                               }
                               return Promise.resolve();
@@ -368,7 +366,7 @@ export function RegisterForm() {
                         rules={[
                           {
                             required: true,
-                            message: "*Payment type is required",
+                            message: "Payment type is required",
                           },
                         ]}
                       >
@@ -392,7 +390,7 @@ export function RegisterForm() {
                         rules={[
                           {
                             required: selectedPaymentOption !== 3,
-                            message: "*Price is required",
+                            message: "Price is required",
                           },
                         ]}
                       >
@@ -409,7 +407,7 @@ export function RegisterForm() {
                     name="experience"
                     label="Experience (in months)"
                     rules={[
-                      { required: true, message: "*Experience required" },
+                      { required: true, message: "Experience required" },
                     ]}
                   >
                     <InputNumber

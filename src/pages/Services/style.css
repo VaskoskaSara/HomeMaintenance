@@ -22,4 +22,14 @@ input[type=number] {
 
 .card-style > .ant-card-body {
   background-color: rgb(243, 243, 243);
+  padding: 10px;
+}
+
+#service-aside {
+  flex: 0 0 300px !important;
+  max-width: 300px !important;
+    min-width: 300px !important;
+    width: 300px !important;
+    background-color: #ededed;
+    padding: 100px 50px;
 }

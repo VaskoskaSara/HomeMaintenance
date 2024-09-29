@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        darkgoldenrod: '#b8860b', // Add this line
+        darkgoldenrod: '#b8860b'
       },
       height: {
         '45': '45px',

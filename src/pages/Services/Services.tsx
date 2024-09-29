@@ -1,12 +1,11 @@
 import {
   Button,
   Card,
-  Cascader,
-  Checkbox,
   Col,
   InputNumber,
   Rate,
   Row,
+  Select,
   Slider,
   Spin,
   Switch,
@@ -23,17 +22,9 @@ import { ApiResponse, Position } from "../RegisterPage/RegisterPage.props";
 import { Employee, ICityOption } from "./Services.types";
 import "./style.css";
 import CategoriesModal from "./components/CategoriesModal";
+import { postJsonFetcher } from "src/api/apiCommand";
 
-const option = [
-  {
-    value: "zhejiang",
-    label: "Zhejiang",
-  },
-  {
-    value: "jiangsu",
-    label: "Jiangsu",
-  },
-];
+const { Option } = Select;
 
 const Services: React.FC = () => {
   const [city, setCity] = useState<string[] | null>(null);
@@ -41,13 +32,6 @@ const Services: React.FC = () => {
   const [price, setPrice] = useState<number | null>(null);
   const [byContract, setByContract] = useState<boolean | null>(false);
   const [cities, setCities] = useState<ICityOption[]>();
-
-  const queryString = new URLSearchParams({
-    city: city ? city[0] : "",
-    price: price ? price.toString() : "",
-    experience: experience ? experience.toString() : "",
-    byContract: byContract ? byContract.toString() : "",
-  }).toString();
 
   const { data: positions, isLoading } = useSWR<ApiResponse<Position[]>>(
     "/api/user/positions",
@@ -58,9 +42,16 @@ const Services: React.FC = () => {
     ApiResponse<string[]>
   >("/api/user/cities", getFetcher);
 
-  const { data: employees, isLoading: isLoadingEmployees } = useSWR<
-    ApiResponse<Employee[]>
-  >(`/api/user/employees?${queryString}`, getFetcher);
+  const filterData = {
+    cities: Array.isArray(city) && city.length > 0 ? city : null,
+    price: price ? price.toString() : null, 
+    experience: experience ? experience.toString() : null, 
+    excludeByContract: byContract !== undefined ? byContract : null 
+  };
+
+  const { data: employees, isLoading: isLoadingEmployees } = useSWR<Employee[]>(
+    ['/api/user/employees', filterData],
+    ([url, filterData]) => postJsonFetcher(url, { arg: filterData }));
 
   const [visible, setVisible] = useState(false);
 
@@ -104,20 +95,32 @@ const Services: React.FC = () => {
               <div className="inline-grid gap-5">
                 <div className="inline-grid gap-1.25">
                   <Typography>Choose by city:</Typography>
-                  <Cascader
-                    options={cities}
-                    placeholder="City"
-                    value={city ? city : []}
-                    onChange={(value) => {
-                      if (value !== undefined) {
-                        setCity(value);
-                      }
-                    }}
-                    onClear={() => setCity(null)}
-                  />
+                  <Select
+                      mode="multiple"
+                      placeholder="Select cities"
+                      value={city ? city : []}
+                      allowClear
+                      onChange={(value) => {
+                        if (value !== undefined) {
+                          setCity(value);
+                        }
+                      }}
+                      onClear={() => setCity(null)}
+                      dropdownStyle={{ minHeight: '200px' }}
+                      style={{ 
+                        width: '100%',
+                        height: 'auto'
+                      }}
+                      >
+                      {cities?.map(city => (
+                        <Option key={city.value} value={city.value}>
+                          {city.label}
+                        </Option>
+                      ))}
+                    </Select>
                 </div>
                 <div className="inline-grid gap-1.25">
-                  <Typography>Choose by experience (in months):</Typography>
+                  <Typography>Choose the min experience (in months):</Typography>
                   <InputNumber
                     className="w-auto"
                     placeholder="Experience"
@@ -129,7 +132,7 @@ const Services: React.FC = () => {
                   />
                 </div>
                 <div className="inline-grid gap-1.25">
-                  <Typography>Choose price range:</Typography>
+                  <Typography>Choose price range from 0 to:</Typography>
                   <Slider
                     range
                     onChange={(value: number[]) => setPrice(value[0])}
@@ -137,11 +140,12 @@ const Services: React.FC = () => {
                     min={0}
                     max={10000}
                   />
-                  <Switch defaultChecked={false} checked={byContract ? byContract : undefined} 
-                   onChange={(value) =>
-                    setByContract(value)
-                  } />
                     Iskluchi gi tie po dogovor
+                    <Switch defaultChecked={false} checked={byContract ? byContract : undefined} 
+                   onChange={(value) =>
+                    setByContract(value) }
+                    className="w-fit"
+                  />
                 </div>
               </div>
             </div>
@@ -156,7 +160,7 @@ const Services: React.FC = () => {
                 onClose={() => setVisible(false)}
             />
           <Row className="w-full relative grid grid-cols-4 pt-2 px-5 pb-[3rem] top-[10%]">
-            {employees?.data.map((employee) => (
+            {employees?.map((employee: any) => (
               <Col>
                 <Card
                   className="w-[250px] w-[80%] shadow-[6px_5px_30px_rgba(0,0,0,0.5)] h-full card-style"
@@ -181,7 +185,7 @@ const Services: React.FC = () => {
                     Experience: {employee.experience} months
                   </Typography>
                   <Typography className="text-[16px]">
-                    Payment: {employee.price}/h
+                    Payment: {employee.price ? `${employee.price}/h` : 'By Contract'}
                   </Typography>
                   <Typography className="text-[16px]">
                     City: {employee.city}

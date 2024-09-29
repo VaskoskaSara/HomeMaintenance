@@ -7,9 +7,13 @@ import React from "react";
 import AppWrapper from "../common/AppWrapper/AppWrapper";
 import './style.css';
 import { carouselImages, employeeCards } from "./HomePage.helper";
+import { useNavigate } from "react-router-dom";
 
 
-const HomePage: React.FC = () => (
+const HomePage: React.FC = () => {
+  const navigate = useNavigate();
+
+  return (
   <div className="bg-black">
     <AppWrapper>
       <Layout>
@@ -44,9 +48,8 @@ const HomePage: React.FC = () => (
                 cover={<img alt="example" src={item.image} className="h-full"/>}
               >
                 <Meta title={item.title} />
-                <a href="/register">
-                <Button icon={<ArrowRightOutlined />} iconPosition="end" className="mt-[40px]">GO TO</Button>
-                </a>
+                <Button icon={<ArrowRightOutlined />} iconPosition="end" className="mt-[40px]" 
+                onClick={() => navigate('/register', { state: { type: item.type } })} >GO TO</Button>
               </Card>
             </Col>
             ))}
@@ -56,6 +59,7 @@ const HomePage: React.FC = () => (
       </Layout>
     </AppWrapper>
   </div>
-);
+  )
+};
 
 export default HomePage;

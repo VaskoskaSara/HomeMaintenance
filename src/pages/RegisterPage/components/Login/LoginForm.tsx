@@ -1,27 +1,33 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Button, Form, Input, notification } from "antd";
+import { Button, Form, Input, notification, Spin } from "antd";
 import Title from "antd/es/typography/Title";
 import { useNavigate } from "react-router-dom";
 import { postJsonFetcher } from "src/api/apiCommand";
 import useSWRMutation from "swr/mutation";
 import "../../style.css";
 import { LoginFormObject } from "./LoginForm.props";
+import { useState } from "react";
+import { useAuth } from "src/pages/common/AuthContext";
 
 export function LoginForm() {
 
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const { trigger } = useSWRMutation(
     "/api/user/userLogin",
     postJsonFetcher
     );
+    const [loading, setLoading] = useState(false);
 
   const handleFinish = async () => {
+    setLoading(true);
     const allValues = form.getFieldsValue(true) as LoginFormObject;      
 
       trigger(allValues)
       .then(() => {
+      login();
       notification.success({
         message: 'Login Successful',
         description: 'You have successfully login. Welcome!',
@@ -31,6 +37,7 @@ export function LoginForm() {
 
       setTimeout(() => {
         navigate('/');
+        setLoading(false);
       }, 5000)
       })
       .catch(() => {
@@ -39,14 +46,17 @@ export function LoginForm() {
           description: 'You haven\'t successfully login. Please try again.',
           placement: 'topLeft',
           duration: 5
-        });
-      });      
+        })
+        setLoading(false);
+      });   
   };
 
   return (
     <div>
       <Title level={2}>Login</Title>
       <div className="my-8 mx-12">
+      {loading ? 
+      (<div className="flex items-center justify-center h-[300px]"><Spin size="large" tip="Loading..."  /></div>) : (
         <Form form={form} onFinish={handleFinish}>
         <Form.Item
             name="email"
@@ -75,7 +85,7 @@ export function LoginForm() {
               Submit
             </Button>
           </Form.Item>
-        </Form>
+        </Form>)}
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ import {
 } from "antd";
 import Title from "antd/es/typography/Title";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getFetcher } from "src/api/apiQuery";
 import useSWR from "swr";
 import validator from "validator";
@@ -30,7 +30,8 @@ import { CustomError, PaymentType, RegisterFormObject } from "./RegisterForm.pro
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { parsePhoneNumberFromString, isValidNumber } from 'libphonenumber-js';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "src/pages/common/AuthContext";
 
 const { Step } = Steps;
 
@@ -40,6 +41,19 @@ export function RegisterForm() {
   const { Option } = Select;
 
   const navigate = useNavigate();
+
+  const location = useLocation();
+  const { login } = useAuth();
+
+  useEffect(() => {
+    const { state } = location;
+    if (state && state.type) {
+      form.setFieldsValue({ userType: state.type.toString() });
+    }
+    else {
+      form.setFieldsValue({ userType: undefined });
+    }
+  }, [location, form]);
 
   const { data: positions, isLoading } = useSWR<ApiResponse<Position[]>>(
     "/api/user/positions",
@@ -112,8 +126,10 @@ export function RegisterForm() {
         console.log("Validation Failed:", info);
       });
   };
+  const [loading, setLoading] = useState(false);
 
   const handleFinish = async () => {
+    setLoading(true);
     const formDataToSend = new FormData();
 
     const allValues = form.getFieldsValue(true) as RegisterFormObject;
@@ -142,6 +158,7 @@ export function RegisterForm() {
     });
 
       trigger(formDataToSend).then(() => {
+        login();
         notification.success({
           message: 'Registration Successful',
           description: 'You have successfully registered. Welcome!',
@@ -151,6 +168,7 @@ export function RegisterForm() {
   
         setTimeout(() => {
           navigate('/');
+          setLoading(false);
         }, 5000);
       }).catch((ex : CustomError) => {
         notification.error({
@@ -159,6 +177,7 @@ export function RegisterForm() {
           placement: 'topRight',
           duration: 5
         });
+        setLoading(false);
       });
   };
 
@@ -286,13 +305,13 @@ export function RegisterForm() {
             rules={[{ required: true, message: "User role is required" }]}
           >
             <Radio.Group className="w-full text-center">
-              <Radio.Button value="1" className="w-[33.33%]">
+              <Radio.Button value="1" className="w-[33.33%]" checked={form.getFieldValue("userType") === "1" ?? false}>
                 Customer
               </Radio.Button>
-              <Radio.Button value="2" className="w-[33.33%]">
+              <Radio.Button value="2" className="w-[33.33%]" checked={form.getFieldValue("userType") === "2" ?? false}>
                 Individual employee
               </Radio.Button>
-              <Radio.Button value="3" className="w-[33.33%]">
+              <Radio.Button value="3" className="w-[33.33%]" checked={form.getFieldValue("userType") === "3" ?? false}>
                 Business/Group
               </Radio.Button>
             </Radio.Group>
@@ -304,7 +323,7 @@ export function RegisterForm() {
             }
           >
             {({ getFieldValue }) =>
-              getFieldValue("userType") !== "1" ? (
+              getFieldValue("userType") !== "1" &&  getFieldValue("userType") !== undefined ? (
                 <>
                   <Row gutter={16}>
                     <Col span={12}>
@@ -397,6 +416,7 @@ export function RegisterForm() {
                         <InputNumber
                           placeholder="Enter a number"
                           disabled={selectedPaymentOption === 3}
+                          min={1}
                         />
                       </Form.Item>
                     </Col>
@@ -477,12 +497,15 @@ export function RegisterForm() {
               <Button icon={<UploadOutlined />}>Upload Image</Button>
             </Upload>
           </Form.Item>
+          {form.getFieldValue("userType") !== "1" ? 
+          (<>
           <Form.Item
         label="Description"
         name="description"
       >
-        <Input.TextArea rows={4} placeholder="Enter a brief description" />
+         <Input.TextArea rows={4} placeholder="Enter a brief description" />
       </Form.Item>
+    </>) : <></>}
         </Form>
       ),
     },
@@ -512,8 +535,8 @@ export function RegisterForm() {
     <div>
       <Title level={2}>Register form</Title>
       <div className="inline-grid justify-center items-center m-[2%] max-w-[500px] w-full">
-      {isLoading ? 
-      (<Spin size="large" tip="Loading..."  />) : (
+      {isLoading || loading ? 
+      (<div className="flex items-center justify-center h-[300px]"><Spin size="large" tip="Loading..."  /></div>) : (
         <>
       <Steps current={current} size="small" className="mb-6">
         {steps.map((item) => (

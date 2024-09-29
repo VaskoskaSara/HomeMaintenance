@@ -10,7 +10,7 @@ import { RegisterForm } from "./components/Register/RegisterForm";
 function RegisterPage() {
   const location = useLocation();
   const navigate = useNavigate();
-    const [isRegisterPage, setIsRegisterPage] = useState(false);
+  const [isRegisterPage, setIsRegisterPage] = useState(false);
 
   useEffect(() => {
     const signUpButton = document.getElementById("signUp");
@@ -64,7 +64,7 @@ function RegisterPage() {
             { isRegisterPage ? (
             <div className="transition-all duration-600 ease-in-out flex-1 self-center text-center sign-up-container">
               <div className="bg-white">
-                <RegisterForm />
+                <RegisterForm/>
               </div>
             </div> ) :  (
             <div className="transition-all duration-600 ease-in-out flex-1 self-center text-center sign-in-container">

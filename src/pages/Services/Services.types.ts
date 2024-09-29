@@ -4,7 +4,7 @@ export type Employee = {
     city: string,
     experience: number,
     positionId: string,
-    price: number;
+    price: number | null;
     avatar: string;
 }
 

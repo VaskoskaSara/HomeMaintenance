@@ -305,13 +305,13 @@ export function RegisterForm() {
             rules={[{ required: true, message: "User role is required" }]}
           >
             <Radio.Group className="w-full text-center">
-              <Radio.Button value="1" className="w-[33.33%]" checked={form.getFieldValue("userType") === "1" ?? false}>
+              <Radio.Button value="1" className="w-[33.33%]" checked={form.getFieldValue("userType") === "1" ? true : false}>
                 Customer
               </Radio.Button>
-              <Radio.Button value="2" className="w-[33.33%]" checked={form.getFieldValue("userType") === "2" ?? false}>
+              <Radio.Button value="2" className="w-[33.33%]" checked={form.getFieldValue("userType") === "2" ? true : false}>
                 Individual employee
               </Radio.Button>
-              <Radio.Button value="3" className="w-[33.33%]" checked={form.getFieldValue("userType") === "3" ?? false}>
+              <Radio.Button value="3" className="w-[33.33%]" checked={form.getFieldValue("userType") === "3" ? true : false}>
                 Business/Group
               </Radio.Button>
             </Radio.Group>

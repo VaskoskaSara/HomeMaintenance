@@ -2,11 +2,15 @@ import { Checkbox, Input, Modal, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { Position } from 'src/pages/RegisterPage/RegisterPage.props';
 
-const CategoriesModal = ({ visible, onClose, positions }: { visible: boolean, onClose: () => void, positions: Position[] | undefined }) => {
+const CategoriesModal = ({ visible, onClose, positions, setCategoryIds, categoryIds } : 
+    { visible: boolean, onClose: () => void, positions: Position[] | undefined ,
+      setCategoryIds: React.Dispatch<React.SetStateAction<string[]>>,
+      categoryIds: string[]
+  }) => {
     const { Search } = Input;
 
     const [searchText, setSearchText] = useState('');
-    const [selectedItems, setSelectedItems] = useState<string[]>([]);
+    const [selectedItems, setSelectedItems] = useState<string[]>(categoryIds ?? []);
     const [filteredPositions, setFilteredPositions] = useState<Position[]>([]);
 
     useEffect(() => {
@@ -24,11 +28,15 @@ const CategoriesModal = ({ visible, onClose, positions }: { visible: boolean, on
             title="Select positions"
             open={visible}
             onCancel={() => {
-                setSelectedItems([]);
+                setSelectedItems(categoryIds ?? [])
                 setSearchText('');
                 onClose();
             }}
-            onOk={() => {}}
+            onOk={() => { 
+                setCategoryIds(selectedItems);
+                setSearchText('');
+                onClose();
+            }}
             okText={"Submit"}
             cancelText={"Cancel"}
             styles={{ content: { width: 'max-content' }, body: { padding: '10px' }, header: { paddingBottom: '10px', borderBottom: '1px solid lightgrey' } }}

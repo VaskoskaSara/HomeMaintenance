@@ -23,6 +23,7 @@ import { Employee, ICityOption } from "./Services.types";
 import "./style.css";
 import CategoriesModal from "./components/CategoriesModal";
 import { postJsonFetcher } from "src/api/apiCommand";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -32,6 +33,9 @@ const Services: React.FC = () => {
   const [price, setPrice] = useState<number | null>(null);
   const [byContract, setByContract] = useState<boolean | null>(false);
   const [cities, setCities] = useState<ICityOption[]>();
+  const [categoryIds, setCategoryIds] = useState<string[]>([]);
+
+  const navigate = useNavigate();
 
   const { data: positions, isLoading } = useSWR<ApiResponse<Position[]>>(
     "/api/user/positions",
@@ -46,12 +50,30 @@ const Services: React.FC = () => {
     cities: Array.isArray(city) && city.length > 0 ? city : null,
     price: price ? price.toString() : null, 
     experience: experience ? experience.toString() : null, 
-    excludeByContract: byContract !== undefined ? byContract : null 
+    excludeByContract: byContract !== undefined ? byContract : null,
+    categoryIds: categoryIds
   };
 
-  const { data: employees, isLoading: isLoadingEmployees } = useSWR<Employee[]>(
+  // Use state to manage employees and loading state
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [isLoadingEmployees, setIsLoadingEmployees] = useState<boolean>(true);
+
+  // Fetching employees using SWR
+  const { data: empl, isLoading: isLoadingEm } = useSWR<Employee[]>(
     ['/api/user/employees', filterData],
-    ([url, filterData]) => postJsonFetcher(url, { arg: filterData }));
+    ([url, filterData]) => postJsonFetcher(url, { arg: filterData }),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  );
+
+  useEffect(() => {
+    if (empl) {
+      setEmployees(empl); // Update employees state
+    }
+    setIsLoadingEmployees(isLoadingEm); // Update loading state
+  }, [empl, isLoadingEm]); // Depend on fetched data and loading state
 
   const [visible, setVisible] = useState(false);
 
@@ -158,11 +180,13 @@ const Services: React.FC = () => {
                 visible={visible} 
                 positions={positions?.data}
                 onClose={() => setVisible(false)}
+                setCategoryIds={setCategoryIds}
+                categoryIds={categoryIds}
             />
           <Row className="w-full relative grid grid-cols-4 pt-2 px-5 pb-[3rem] top-[10%]">
             {employees?.map((employee: any) => (
               <Col>
-                <Card
+                <Card 
                   className="w-[250px] w-[80%] shadow-[6px_5px_30px_rgba(0,0,0,0.5)] h-full card-style"
                   hoverable
                   cover={
@@ -190,7 +214,7 @@ const Services: React.FC = () => {
                   <Typography className="text-[16px]">
                     City: {employee.city}
                   </Typography>
-                  <Button className="mt-5 bg-black text-white">Details</Button>
+                  <Button className="mt-5 bg-black text-white" onClick={() => navigate(`/services/${employee.id}`)}>Details</Button>
                 </Card>
               </Col>
             ))}

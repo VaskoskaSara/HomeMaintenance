@@ -54,11 +54,9 @@ const Services: React.FC = () => {
     categoryIds: categoryIds
   };
 
-  // Use state to manage employees and loading state
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoadingEmployees, setIsLoadingEmployees] = useState<boolean>(true);
 
-  // Fetching employees using SWR
   const { data: empl, isLoading: isLoadingEm } = useSWR<Employee[]>(
     ['/api/user/employees', filterData],
     ([url, filterData]) => postJsonFetcher(url, { arg: filterData }),
@@ -70,10 +68,10 @@ const Services: React.FC = () => {
 
   useEffect(() => {
     if (empl) {
-      setEmployees(empl); // Update employees state
+      setEmployees(empl); 
     }
-    setIsLoadingEmployees(isLoadingEm); // Update loading state
-  }, [empl, isLoadingEm]); // Depend on fetched data and loading state
+    setIsLoadingEmployees(isLoadingEm); 
+  }, [empl, isLoadingEm]); 
 
   const [visible, setVisible] = useState(false);
 

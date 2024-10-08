@@ -4,6 +4,7 @@ import HomePage from "../../pages/HomePage/HomePage";
 import Services from "../../pages/Services/Services";
 import ServiceDetails from "../../pages/ServiceDetails/ServiceDetails";
 import RegisterPage from "src/pages/RegisterPage/RegisterAndLoginPage";
+import EmployeeBookingMngm from "src/pages/EmployeeBookingMngm/EmployeeBookingMngm";
 
 const AppRoutes: () => JSX.Element = () => {
     
@@ -16,6 +17,7 @@ const AppRoutes: () => JSX.Element = () => {
                     <Route path="/services/:id" element={<ServiceDetails />} />
                     <Route path={"/login"} element={<RegisterPage />} />
                     <Route path={"/register"} element={<RegisterPage />} />
+                    <Route path={"/manage-bookings"} element={<EmployeeBookingMngm />} />
                     </Routes>
                 </Suspense>
             </Router>

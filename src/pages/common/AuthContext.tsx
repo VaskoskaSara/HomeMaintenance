@@ -2,7 +2,7 @@ import { createContext, useContext, useState, ReactNode, useEffect } from 'react
 
 interface AuthContextType {
     isAuthenticated: boolean;
-    login: () => void;
+    login: (id: string) => void;
     logout: () => void;
 }
 
@@ -11,9 +11,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-    const login = () => {
+    const login = (id: string) => {
         setIsAuthenticated(true);
         localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('loggedUserId', id);
     };
 
     const logout = () => {

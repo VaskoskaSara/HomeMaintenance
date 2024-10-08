@@ -157,8 +157,8 @@ export function RegisterForm() {
       }
     });
 
-      trigger(formDataToSend).then(() => {
-        login();
+      trigger(formDataToSend).then((res: unknown) => {
+        login(res as string);
         notification.success({
           message: 'Registration Successful',
           description: 'You have successfully registered. Welcome!',

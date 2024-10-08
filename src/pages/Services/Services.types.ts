@@ -36,3 +36,12 @@ export type EmployeeBooking = {
     paymentType: string;
     price: number | null;
 }
+
+export type TransactionDetails = {
+    userId: string;
+    employeeId: string;
+    amount: number;
+    paymentId: string;
+    startDateTime: Date;
+    endDateTime: Date;
+}

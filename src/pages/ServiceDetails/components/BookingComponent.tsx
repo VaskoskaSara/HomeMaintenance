@@ -217,7 +217,8 @@ const BookingComponent: React.FC<EmployeeBooking> = ({
               </Form.Item>
             </>
           ) : (
-            <PaymentComponent calculatedPrice={calculatedPrice} setIsPaymentFormVisible={setIsPaymentFormVisible}/>
+            <PaymentComponent calculatedPrice={calculatedPrice} setIsPaymentFormVisible={setIsPaymentFormVisible} 
+            selectedDates={selectedDates} selectedTimes={selectedTimes}/>
           )}
         </Form>
       </Modal>

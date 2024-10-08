@@ -57,6 +57,10 @@ const AppWrapper = ({ children, className } : {children: ReactNode, className?: 
                   key: 'logout',
                   label: <span onClick={logout}>Logout</span>,
                 },
+                {
+                  key: 'manageBookings',
+                  label: <Button onClick={() => navigate("/manage-bookings")}>Manage bookings</Button>,
+                }
               ],
             }}
             trigger={['click']}

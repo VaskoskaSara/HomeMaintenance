@@ -2,22 +2,29 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { Button, Form, Result } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { postJsonFetcher } from "src/api/apiCommand";
+import { TransactionDetails } from "src/pages/Services/Services.types";
 import useSWRMutation from "swr/mutation";
+import moment from 'moment';
 
 interface PaymentComponentProps {
   calculatedPrice: number;
   setIsPaymentFormVisible: Dispatch<SetStateAction<boolean>>;
+  selectedDates: string[];
+  selectedTimes: any[];
 }
 
 const PaymentComponent: React.FC<PaymentComponentProps> = ({
   calculatedPrice,
   setIsPaymentFormVisible,
+  selectedDates,
+  selectedTimes
 }: PaymentComponentProps) => {
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState<boolean | null>(null);
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const stripe = useStripe();
   const elements = useElements();
@@ -27,58 +34,101 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
     postJsonFetcher
   );
 
-  const handlePayment = async (event: React.FormEvent) => {
+  const { trigger : transactionTrigger } = useSWRMutation(
+    "/api/payment/save-transaction",
+    postJsonFetcher
+  );
+
+  const handlePayment = async (event?: React.FormEvent) => {
+    setLoading(true);
+    var paymentData;
+
     try {
-      event.preventDefault();
-      setLoading(true);
+      if (event) {
+        event.preventDefault();
 
-      if (!stripe || !elements) {
-        console.error("Stripe.js hasn't loaded yet.");
-        setLoading(false);
-        return;
-      }
+        if (!stripe || !elements) {
+          console.error("Stripe.js hasn't loaded yet.");
+          return;
+        }
 
-      const cardElement = elements.getElement(CardElement);
-      if (!cardElement) {
-        console.error("CardElement is not mounted.");
-        setLoading(false);
-        return;
-      }
+        const cardElement = elements.getElement(CardElement);
+        if (!cardElement) {
+          console.error("CardElement is not mounted.");
+          return;
+        }
 
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: "card",
-        card: cardElement,
-      });
+        const { error: paymentMethodError, paymentMethod } =
+          await stripe.createPaymentMethod({
+            type: "card",
+            card: cardElement,
+          });
 
-      if (error) {
-        console.error("Error creating payment method:", error);
-        setPaymentSuccess(false);
-      }
+        if (paymentMethodError) {
+          console.error("Error creating payment method:", paymentMethodError);
+          setPaymentSuccess(false);
+          return;
+        }
 
-      try {
-        var paymentData = {
-          paymentMethodId: paymentMethod?.id,
+        paymentData = {
+          paymentMethodId: paymentMethod.id,
           amount: calculatedPrice,
         };
+      } else {
+        paymentData = {
+          paymentMethodId: undefined,
+          amount: calculatedPrice,
+        };
+      }
 
-        trigger(paymentData).then(async (res: any) => {
+      trigger(paymentData).then(async (res: any) => {
+        if (event) {
           const secret = res.clientSecret;
-          const confirmResult = await stripe.confirmCardPayment(secret);
+          const confirmResult = await stripe!.confirmCardPayment(secret);
           if (confirmResult.error) {
             setPaymentSuccess(false);
           } else {
             setPaymentSuccess(true);
           }
-        });
-      } catch (error) {
-        setPaymentSuccess(false);
-      } finally {
-        setLoading(false);
+        } else {
+          setPaymentSuccess(true);
+        }
+      });
+
+      try {
+        const [startHour, startMinute] = selectedTimes[0].split(":").map(Number);
+        const [endHour, endMinute] = selectedTimes[1].split(":").map(Number);
+
+        transactionTrigger({
+          userId: localStorage.getItem("loggedUserId"),
+          employeeId: id,
+          amount: calculatedPrice,
+          paymentId: paymentData.paymentMethodId,
+          startDateTime: moment.utc(selectedDates[0]).set({
+            hour: startHour,
+            minute: startMinute,
+          }),
+          endDateTime: moment.utc(selectedDates[1]).set({
+            hour: endHour,
+            minute: endMinute,
+          })
+        } as unknown as TransactionDetails);
+      } catch (ex) {
+        console.error("Payment is processed but transaction is not saved, please contact our service");
       }
+
     } catch (ex) {
+      console.error("An error occurred during payment processing:", ex);
       setPaymentSuccess(false);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (calculatedPrice === 0) {
+    // setIsPaymentFormVisible(false);
+    handlePayment();
+  }
 
   return (
     <>

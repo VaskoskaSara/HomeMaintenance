@@ -1,12 +1,13 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { Button, Form, Result } from "antd";
 import Title from "antd/es/typography/Title";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { postJsonFetcher } from "src/api/apiCommand";
 import { TransactionDetails } from "src/pages/Services/Services.types";
 import useSWRMutation from "swr/mutation";
-import moment from 'moment';
+import moment from "moment";
+import { useAuth } from "src/pages/common/AuthContext";
 
 interface PaymentComponentProps {
   calculatedPrice: number;
@@ -19,12 +20,13 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
   calculatedPrice,
   setIsPaymentFormVisible,
   selectedDates,
-  selectedTimes
+  selectedTimes,
 }: PaymentComponentProps) => {
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState<boolean | null>(null);
   const navigate = useNavigate();
   const { id } = useParams();
+  const { id: authId } = useAuth();
 
   const stripe = useStripe();
   const elements = useElements();
@@ -34,14 +36,15 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
     postJsonFetcher
   );
 
-  const { trigger : transactionTrigger } = useSWRMutation(
+  const { trigger: transactionTrigger } = useSWRMutation(
     "/api/payment/save-transaction",
     postJsonFetcher
   );
 
+  var paymentData;
+
   const handlePayment = async (event?: React.FormEvent) => {
     setLoading(true);
-    var paymentData;
 
     try {
       if (event) {
@@ -96,11 +99,13 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
       });
 
       try {
-        const [startHour, startMinute] = selectedTimes[0].split(":").map(Number);
+        const [startHour, startMinute] = selectedTimes[0]
+          .split(":")
+          .map(Number);
         const [endHour, endMinute] = selectedTimes[1].split(":").map(Number);
 
         transactionTrigger({
-          userId: localStorage.getItem("loggedUserId"),
+          userId: authId,
           employeeId: id,
           amount: calculatedPrice,
           paymentId: paymentData.paymentMethodId,
@@ -111,12 +116,13 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
           endDateTime: moment.utc(selectedDates[1]).set({
             hour: endHour,
             minute: endMinute,
-          })
+          }),
         } as unknown as TransactionDetails);
       } catch (ex) {
-        console.error("Payment is processed but transaction is not saved, please contact our service");
+        console.error(
+          "Payment is processed but transaction is not saved, please contact our service"
+        );
       }
-
     } catch (ex) {
       console.error("An error occurred during payment processing:", ex);
       setPaymentSuccess(false);
@@ -125,10 +131,11 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
     }
   };
 
-  if (calculatedPrice === 0) {
-    // setIsPaymentFormVisible(false);
-    handlePayment();
-  }
+  useEffect(() => {
+    if (calculatedPrice === 0 && paymentData! === undefined) {
+      handlePayment();
+    }
+  }, [calculatedPrice]);
 
   return (
     <>

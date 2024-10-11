@@ -24,6 +24,7 @@ import "./style.css";
 import CategoriesModal from "./components/CategoriesModal";
 import { postJsonFetcher } from "src/api/apiCommand";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../common/AuthContext";
 
 const { Option } = Select;
 
@@ -35,6 +36,7 @@ const Services: React.FC = () => {
   const [cities, setCities] = useState<ICityOption[]>();
   const [categoryIds, setCategoryIds] = useState<string[]>([]);
 
+  const { id } = useAuth();
   const navigate = useNavigate();
 
   const { data: positions, isLoading } = useSWR<ApiResponse<Position[]>>(
@@ -48,17 +50,17 @@ const Services: React.FC = () => {
 
   const filterData = {
     cities: Array.isArray(city) && city.length > 0 ? city : null,
-    price: price ? price.toString() : null, 
-    experience: experience ? experience.toString() : null, 
+    price: price ? price.toString() : null,
+    experience: experience ? experience.toString() : null,
     excludeByContract: byContract !== undefined ? byContract : null,
-    categoryIds: categoryIds
+    categoryIds: categoryIds,
   };
 
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoadingEmployees, setIsLoadingEmployees] = useState<boolean>(true);
 
   const { data: empl, isLoading: isLoadingEm } = useSWR<Employee[]>(
-    ['/api/user/employees', filterData],
+    ["/api/user/employees", filterData],
     ([url, filterData]) => postJsonFetcher(url, { arg: filterData }),
     {
       revalidateOnFocus: false,
@@ -68,10 +70,10 @@ const Services: React.FC = () => {
 
   useEffect(() => {
     if (empl) {
-      setEmployees(empl); 
+      setEmployees(empl.filter((x) => x.id !== id));
     }
-    setIsLoadingEmployees(isLoadingEm); 
-  }, [empl, isLoadingEm]); 
+    setIsLoadingEmployees(isLoadingEm);
+  }, [empl, isLoadingEm]);
 
   const [visible, setVisible] = useState(false);
 
@@ -105,42 +107,40 @@ const Services: React.FC = () => {
     <AppWrapper className="block">
       <div className="flex gap-5">
         <Content className="flex">
-          <Sider
-            width={400}
-            id="service-aside"
-            className="h-full p-[7%]"
-          >
+          <Sider width={400} id="service-aside" className="h-full p-[7%]">
             <div>
               <Title level={4}>Filter by:</Title>
               <div className="inline-grid gap-5">
                 <div className="inline-grid gap-1.25">
                   <Typography>Choose by city:</Typography>
                   <Select
-                      mode="multiple"
-                      placeholder="Select cities"
-                      value={city ? city : []}
-                      allowClear
-                      onChange={(value) => {
-                        if (value !== undefined) {
-                          setCity(value);
-                        }
-                      }}
-                      onClear={() => setCity(null)}
-                      dropdownStyle={{ minHeight: '200px' }}
-                      style={{ 
-                        width: '100%',
-                        height: 'auto'
-                      }}
-                      >
-                      {cities?.map(city => (
-                        <Option key={city.value} value={city.value}>
-                          {city.label}
-                        </Option>
-                      ))}
-                    </Select>
+                    mode="multiple"
+                    placeholder="Select cities"
+                    value={city ? city : []}
+                    allowClear
+                    onChange={(value) => {
+                      if (value !== undefined) {
+                        setCity(value);
+                      }
+                    }}
+                    onClear={() => setCity(null)}
+                    dropdownStyle={{ minHeight: "200px" }}
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                    }}
+                  >
+                    {cities?.map((city) => (
+                      <Option key={city.value} value={city.value}>
+                        {city.label}
+                      </Option>
+                    ))}
+                  </Select>
                 </div>
                 <div className="inline-grid gap-1.25">
-                  <Typography>Choose the min experience (in months):</Typography>
+                  <Typography>
+                    Choose the min experience (in months):
+                  </Typography>
                   <InputNumber
                     className="w-auto"
                     placeholder="Experience"
@@ -160,10 +160,11 @@ const Services: React.FC = () => {
                     min={0}
                     max={10000}
                   />
-                    Iskluchi gi tie po dogovor
-                    <Switch defaultChecked={false} checked={byContract ? byContract : undefined} 
-                   onChange={(value) =>
-                    setByContract(value) }
+                  Iskluchi gi tie po dogovor
+                  <Switch
+                    defaultChecked={false}
+                    checked={byContract ? byContract : undefined}
+                    onChange={(value) => setByContract(value)}
                     className="w-fit"
                   />
                 </div>
@@ -171,52 +172,62 @@ const Services: React.FC = () => {
             </div>
           </Sider>
           <div className="pt-2 px-5 pb-7 w-full">
-          <Button className="filterByCategoriesBtn" onClick={() => setVisible(true)}>
-            Filter by categories
-          </Button>
-          <CategoriesModal 
-                visible={visible} 
-                positions={positions?.data}
-                onClose={() => setVisible(false)}
-                setCategoryIds={setCategoryIds}
-                categoryIds={categoryIds}
+            <Button
+              className="filterByCategoriesBtn"
+              onClick={() => setVisible(true)}
+            >
+              Filter by categories
+            </Button>
+            <CategoriesModal
+              visible={visible}
+              positions={positions?.data}
+              onClose={() => setVisible(false)}
+              setCategoryIds={setCategoryIds}
+              categoryIds={categoryIds}
             />
-          <Row className="w-full relative grid grid-cols-4 pt-2 px-5 pb-[3rem] top-[10%]">
-            {employees?.map((employee: any) => (
-              <Col>
-                <Card 
-                  className="w-[250px] w-[80%] shadow-[6px_5px_30px_rgba(0,0,0,0.5)] h-full card-style"
-                  hoverable
-                  cover={
-                    <img
-                      alt="example"
-                      src={employee.avatar}
-                      className="h-[200px] object-cover"
-                    />
-                  }
-                >
-                  <Title level={5}>
-                    {employee.fullName},{" "}
-                    {
-                      positions?.data.find((x) => x.id === employee.positionId)
-                        ?.positionName
+            <Row className="w-full relative grid grid-cols-4 pt-2 px-5 pb-[3rem] top-[10%]">
+              {employees?.map((employee: any) => (
+                <Col>
+                  <Card
+                    className="w-[250px] w-[80%] shadow-[6px_5px_30px_rgba(0,0,0,0.5)] h-full card-style"
+                    hoverable
+                    cover={
+                      <img
+                        alt="example"
+                        src={employee.avatar}
+                        className="h-[200px] object-cover"
+                      />
                     }
-                  </Title>
-                  <Rate disabled defaultValue={2} />
-                  <Typography className="text-[16px]">
-                    Experience: {employee.experience} months
-                  </Typography>
-                  <Typography className="text-[16px]">
-                    Payment: {employee.price ? `${employee.price}/h` : 'By Contract'}
-                  </Typography>
-                  <Typography className="text-[16px]">
-                    City: {employee.city}
-                  </Typography>
-                  <Button className="mt-5 bg-black text-white" onClick={() => navigate(`/services/${employee.id}`)}>Details</Button>
-                </Card>
-              </Col>
-            ))}
-          </Row>
+                  >
+                    <Title level={5}>
+                      {employee.fullName},{" "}
+                      {
+                        positions?.data.find(
+                          (x) => x.id === employee.positionId
+                        )?.positionName
+                      }
+                    </Title>
+                    <Rate disabled defaultValue={2} />
+                    <Typography className="text-[16px]">
+                      Experience: {employee.experience} months
+                    </Typography>
+                    <Typography className="text-[16px]">
+                      Payment:{" "}
+                      {employee.price ? `${employee.price}/h` : "By Contract"}
+                    </Typography>
+                    <Typography className="text-[16px]">
+                      City: {employee.city}
+                    </Typography>
+                    <Button
+                      className="mt-5 bg-black text-white"
+                      onClick={() => navigate(`/services/${employee.id}`)}
+                    >
+                      Details
+                    </Button>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
           </div>
         </Content>
       </div>

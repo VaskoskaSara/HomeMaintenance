@@ -1,18 +1,16 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
-    Button,
-    DatePicker,
-    Divider,
-    Form,
-    Modal,
-    TimePicker
-} from "antd";
+import { Button, DatePicker, Divider, Form, Modal, TimePicker } from "antd";
 import Title from "antd/es/typography/Title";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import { PaymentType } from "src/pages/RegisterPage/components/Register/RegisterForm.props";
 import { EmployeeBooking } from "src/pages/Services/Services.types";
 import PaymentComponent from "./PaymentComponent";
+import { getDisabledDates } from "src/pages/EmployeeBookingMngm/EmployeeBookingMng.helper";
+import { useParams } from "react-router-dom";
+import { ApiResponse } from "src/pages/RegisterPage/RegisterPage.props";
+import useSWR from "swr";
+import { getFetcher } from "src/api/apiQuery";
 
 const { RangePicker } = DatePicker;
 
@@ -26,6 +24,8 @@ const BookingComponent: React.FC<EmployeeBooking> = ({
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [selectedTimes, setSelectedTimes] = useState<any[]>([]);
   const [calculatedPrice, setCalculatedPrice] = useState<number>(0);
+  const [disabledDates, setDisabledDates] = useState<Date[]>([]);
+  const { id } = useParams();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -54,6 +54,39 @@ const BookingComponent: React.FC<EmployeeBooking> = ({
       : [];
 
     setSelectedTimes(formattedTimes);
+  };
+
+  const { employeeDisabledDates, isLoadingDisabledDates } = getDisabledDates(
+    id as string
+  );
+
+  const { data: bookedDays, isLoading: isLoadingBookingDays } = useSWR<ApiResponse<Date[]>>(
+    `/api/user/manage-bookings/booked-dates/${id}`,
+    getFetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  );  
+
+  useEffect(() => {
+    if (!isLoadingDisabledDates && !isLoadingBookingDays && employeeDisabledDates && bookedDays) {
+      setDisabledDates([...employeeDisabledDates?.data, ... bookedDays.data]);
+    }
+  }, [isLoadingDisabledDates, isLoadingBookingDays]);
+
+  const disabledDate = (current: dayjs.Dayjs) => {
+    const today = dayjs().endOf("day");
+
+    if (current < today) {
+      return true;
+    }
+
+    if (disabledDates.some((date) => dayjs(date).isSame(current, "day"))) {
+      return true;
+    }
+
+    return false;
   };
 
   const handleSubmit = () => {
@@ -128,7 +161,7 @@ const BookingComponent: React.FC<EmployeeBooking> = ({
         centered
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          {!isPaymentFormVisible ? (
+          {!isPaymentFormVisible && (
             <>
               <Form.Item
                 label="Select Dates"
@@ -142,9 +175,7 @@ const BookingComponent: React.FC<EmployeeBooking> = ({
               >
                 <RangePicker
                   format="YYYY-MM-DD"
-                  disabledDate={(current) =>
-                    current && current < dayjs().endOf("day")
-                  }
+                  disabledDate={disabledDate}
                   onChange={handleDateChange}
                   style={{ width: "100%" }}
                   allowClear
@@ -216,9 +247,14 @@ const BookingComponent: React.FC<EmployeeBooking> = ({
                 </Button>
               </Form.Item>
             </>
-          ) : (
-            <PaymentComponent calculatedPrice={calculatedPrice} setIsPaymentFormVisible={setIsPaymentFormVisible} 
-            selectedDates={selectedDates} selectedTimes={selectedTimes}/>
+          )}
+          {isPaymentFormVisible && (
+            <PaymentComponent
+              calculatedPrice={calculatedPrice}
+              setIsPaymentFormVisible={setIsPaymentFormVisible}
+              selectedDates={selectedDates}
+              selectedTimes={selectedTimes}
+            />
           )}
         </Form>
       </Modal>

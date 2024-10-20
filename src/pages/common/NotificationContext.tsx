@@ -10,12 +10,15 @@ interface NotificationContextType {
     notifications: Notification[];
     addNotification: (userId: string, message: string) => void;
     markAsRead: (index: number) => void; // Function to mark notification as read
+    reviews: any;
+    setReviews: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
 export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [reviews, setReviews] = useState<any[]>([]);
 
     const addNotification = (userId: string, message: string) => {
         setNotifications(prev => [...prev, { userId, message, read: false }]);
@@ -30,7 +33,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <NotificationContext.Provider value={{ notifications, addNotification, markAsRead }}>
+        <NotificationContext.Provider value={{ notifications, addNotification, markAsRead, setReviews, reviews }}>
             {children}
         </NotificationContext.Provider>
     );

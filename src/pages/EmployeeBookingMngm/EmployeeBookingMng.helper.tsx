@@ -1,10 +1,11 @@
+import { Button, message } from "antd";
 import { eachDayOfInterval, format } from "date-fns";
-import { BookingMng } from "./EmployeeBookingMng";
+import dayjs from "dayjs";
 import { getFetcher } from "src/api/apiQuery";
 import useSWR from "swr";
 import { ApiResponse } from "../RegisterPage/RegisterPage.props";
-import dayjs from "dayjs";
-import { message } from "antd";
+import { BookingMng } from "./EmployeeBookingMng";
+
 
 export const columns = [
   {
@@ -38,7 +39,7 @@ export const columns = [
       `${new Date(text).toLocaleDateString()} ${new Date(
         text
       ).toLocaleTimeString()}`,
-  },
+  }
 ];
 
 export const colors = [

@@ -5,4 +5,5 @@ export type BookingMng = {
     amount: number;
     startDateTime: Date;
     endDateTime: Date;
+    isEmployeeReviewed: boolean;
 }

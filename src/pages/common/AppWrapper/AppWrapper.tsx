@@ -170,7 +170,7 @@ const AppWrapper = ({
           mode="horizontal"
           defaultSelectedKeys={["1"]}
           items={menuItems}
-          className="bg-black flex items-center w-auto justify-end h-full menu-items min-w-[500px]"
+          className="bg-black flex items-center w-auto justify-end h-full menu-items min-w-[600px]"
         />
       </Header>
       {children}

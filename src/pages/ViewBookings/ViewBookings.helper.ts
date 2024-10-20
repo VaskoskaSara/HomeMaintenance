@@ -16,3 +16,9 @@ export function getBookingsByUser(id: string) {
 
   return { bookings, isLoading };
 }
+
+export type NotificationDto = {
+  employeeName: string;
+  employeeId: string;
+  paymentId: string;
+}

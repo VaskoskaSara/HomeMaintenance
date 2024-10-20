@@ -171,7 +171,7 @@ const Services: React.FC = () => {
               </div>
             </div>
           </Sider>
-          <div className="pt-2 px-5 pb-7 w-full">
+          <div className="pt-2 px-5 pb-7 w-full" style={{height: 'fit-content'}}>
             <Button
               className="filterByCategoriesBtn"
               onClick={() => setVisible(true)}
@@ -187,7 +187,7 @@ const Services: React.FC = () => {
             />
             <Row className="w-full relative grid grid-cols-4 pt-2 px-5 pb-[3rem] top-[10%]">
               {employees?.map((employee: any) => (
-                <Col>
+                <Col className="mb-[20px]">
                   <Card
                     className="w-[250px] w-[80%] shadow-[6px_5px_30px_rgba(0,0,0,0.5)] h-full card-style"
                     hoverable

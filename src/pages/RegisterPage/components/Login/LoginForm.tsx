@@ -26,8 +26,8 @@ export function LoginForm() {
     const allValues = form.getFieldsValue(true) as LoginFormObject;      
 
       trigger(allValues)
-      .then((res: unknown) => {
-      login(res as string);
+      .then((res: any) => {
+      login(res.id, res.userRole, res.avatar);
       notification.success({
         message: 'Login Successful',
         description: 'You have successfully login. Welcome!',

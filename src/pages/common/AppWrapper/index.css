@@ -1,0 +1,5 @@
+.menu-items li {
+  padding: 8px !important;
+  height: inherit;
+  display: inline-table !important;
+}

@@ -8,6 +8,7 @@ import { TransactionDetails } from "src/pages/Services/Services.types";
 import useSWRMutation from "swr/mutation";
 import moment from "moment";
 import { useAuth } from "src/pages/common/AuthContext";
+import { useNotifications } from "src/pages/common/NotificationContext";
 
 interface PaymentComponentProps {
   calculatedPrice: number;
@@ -27,6 +28,7 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
   const navigate = useNavigate();
   const { id } = useParams();
   const { id: authId } = useAuth();
+  const { addNotification } = useNotifications();
 
   const stripe = useStripe();
   const elements = useElements();
@@ -118,6 +120,8 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
             minute: endMinute,
           }),
         } as unknown as TransactionDetails);
+
+        addNotification(id as string, 'New booking for you! Check you bookings.' );
       } catch (ex) {
         console.error(
           "Payment is processed but transaction is not saved, please contact our service"

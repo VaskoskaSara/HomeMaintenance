@@ -157,8 +157,8 @@ export function RegisterForm() {
       }
     });
 
-      trigger(formDataToSend).then((res: unknown) => {
-        login(res as string);
+      trigger(formDataToSend).then((res: any) => {
+        login(res.id, res.userRole, res.avatar);
         notification.success({
           message: 'Registration Successful',
           description: 'You have successfully registered. Welcome!',
@@ -333,7 +333,7 @@ export function RegisterForm() {
                         rules={[
                           {required: true,
                             validator: (_, value) => {
-                              if (value === null || value === undefined) {
+                              if (value === null && value !== undefined) {
                                 return Promise.reject(new Error('Position is required'));
                               }
                               return Promise.resolve();

@@ -1,4 +1,4 @@
-import { Card, Col, Divider, Row, Spin, Typography } from "antd";
+import { Card, Col, Divider, Rate, Row, Spin, Typography } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { useParams } from "react-router-dom";
 import { getFetcher } from "src/api/apiQuery";
@@ -11,6 +11,8 @@ import BookingComponent from "./components/BookingComponent";
 import PhotoGallery from "./components/PhotoGalery";
 import "./style.css";
 import { useAuth } from "../common/AuthContext";
+import ReviewsComponent from "./components/ReviewsComponent";
+import { getPaymentTypeText } from "./components/ServiceDetails.helper";
 
 const ServiceDetails: React.FC = () => {
   const { id } = useParams();
@@ -38,8 +40,8 @@ const ServiceDetails: React.FC = () => {
 
   return (
     <AppWrapper>
-      <div>
-        <Card>
+      <div className="bg-white">
+        <Card bordered={false}>
           <Row gutter={16}>
             <Col span={6}>
               <img
@@ -47,7 +49,7 @@ const ServiceDetails: React.FC = () => {
                 alt={`${employee?.data?.fullName}'s avatar`}
                 style={{
                   width: 300,
-                  height: 300,
+                  maxHeight: 300,
                   borderRadius: "8px",
                   marginLeft: "50px",
                 }}
@@ -57,7 +59,12 @@ const ServiceDetails: React.FC = () => {
               <Title
                 level={4}
               >{`${employee?.data?.fullName}, ${employee?.data.positionName}`}</Title>
-              <h1>ZVEZDIIIIIII</h1>
+              <Row>
+                <Rate disabled defaultValue={employee?.data.rating.rating} />
+                <Title level={5} className="ml-[8px] mt-[-3px]">
+                  ({employee?.data.rating.numberOfReviews})
+                </Title>
+              </Row>
               <Row gutter={16}>
                 <Col span={24}>
                   <Text strong>City: </Text>
@@ -70,8 +77,8 @@ const ServiceDetails: React.FC = () => {
                   <Text strong>Payment: </Text>
                   <Text>
                     {employee?.data?.price
-                      ? `${employee?.data?.price}`
-                      : `${employee?.data?.paymentType}`}
+                      ? `${employee?.data?.price}${getPaymentTypeText(employee.data.paymentType)}`
+                      : `${getPaymentTypeText(employee?.data?.paymentType!)}`}
                   </Text>
                 </Col>
               </Row>
@@ -106,7 +113,7 @@ const ServiceDetails: React.FC = () => {
                 </Row>
               )}
               {employee?.data.photos && (
-                <PhotoGallery photos={employee?.data.photos} />
+                <PhotoGallery photos={employee?.data.photos} photoGallerySize={4}/>
               )}
             </Col>
             <Col span={3}>
@@ -121,6 +128,7 @@ const ServiceDetails: React.FC = () => {
             </Col>
           </Row>
         </Card>
+        <ReviewsComponent />
       </div>
     </AppWrapper>
   );

@@ -207,9 +207,11 @@ export function RegisterForm() {
                 name="phoneNumber"
                 label="Phone number"
                 rules={[
-                  { required: true, message: "Phone number is required" },
                   {
                     validator: (_, value) => {
+                      if(!value){
+                        return Promise.reject(new Error("Phone number is required"));
+                      }
                       const phoneNumber = parsePhoneNumberFromString(value);
 
                       if (!phoneNumber || !isValidNumber(phoneNumber.number, phoneNumber.country)) {
@@ -218,16 +220,16 @@ export function RegisterForm() {
 
                       return Promise.resolve();
                     },
-                  }
+                  },
                 ]}
               >
                  <PhoneInput
                  className="phoneInput"
                  international
                  defaultCountry="MK"
-                 // placeholder="Enter your phone number"
                  value={form.getFieldValue('phoneNumber')}
                  onChange={(value) => form.setFieldsValue({ phoneNumber: value })}
+                 isValidPhoneNumber={true}
         />
               </Form.Item>
             </Col>
@@ -333,7 +335,7 @@ export function RegisterForm() {
                         rules={[
                           {required: true,
                             validator: (_, value) => {
-                              if (value === null && value !== undefined) {
+                              if (value !== null && value === undefined) {
                                 return Promise.reject(new Error('Position is required'));
                               }
                               return Promise.resolve();
@@ -345,7 +347,7 @@ export function RegisterForm() {
                           placeholder="Select a position"
                           onChange={handleSelectPosition}
                         >
-                          <Option value={undefined}>Other</Option>
+                          <Option value={null}>Other</Option>
                           {!isLoading &&
                             positions?.data.map((option) => (
                               <Option
@@ -394,9 +396,9 @@ export function RegisterForm() {
                           onChange={handleSelectPaymentTypeChange}
                         >
                           <Option value={PaymentType.Hourly}>Hourly</Option>
-                          <Option value={PaymentType.Overall}>Overall</Option>
+                          <Option value={PaymentType.Overall}>Daily</Option>
                           <Option value={PaymentType.Contract}>
-                            By contract
+                            Contract
                           </Option>
                         </Select>
                       </Form.Item>
@@ -442,6 +444,9 @@ export function RegisterForm() {
                   <Form.Item
                     name="numberOfEmployees"
                     label="Number of employees"
+                    rules={[
+                      { required: true, message: "Number of employees required" },
+                    ]}
                   >
                     <InputNumber
                       changeOnWheel
@@ -479,7 +484,9 @@ export function RegisterForm() {
           <Button icon={<UploadOutlined />}>Upload Image</Button>
         </Upload>
         </Form.Item>
-
+        {form.getFieldValue("userType") !== "1" ? 
+          (
+            <>
           <Form.Item
             label="Upload Multiple Images (max 10)"
             name="photos"
@@ -497,8 +504,6 @@ export function RegisterForm() {
               <Button icon={<UploadOutlined />}>Upload Image</Button>
             </Upload>
           </Form.Item>
-          {form.getFieldValue("userType") !== "1" ? 
-          (<>
           <Form.Item
         label="Description"
         name="description"

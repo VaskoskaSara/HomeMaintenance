@@ -1,16 +1,22 @@
-import { useState } from 'react';
-import { Col, Modal, Row, Image } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import PreviewGroup from 'antd/es/image/PreviewGroup';
+import { useState } from "react";
+import { Col, Modal, Row, Image } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import PreviewGroup from "antd/es/image/PreviewGroup";
 
-const PhotoGallery = ({ photos }: { photos: string[]}) => {
+const PhotoGallery = ({
+  photos,
+  photoGallerySize,
+}: {
+  photos: string[];
+  photoGallerySize: number;
+}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   return (
     <>
       <div className="mt-5 flex flex-wrap gap-4">
-        {photos.slice(0, 4).map((url : string, index: number) => (
+        {photos.slice(0, photoGallerySize).map((url: string, index: number) => (
           <div
             key={index}
             className="w-36 h-36 bg-white border border-gray-300 flex justify-center items-center cursor-pointer hover:shadow-md"
@@ -24,7 +30,7 @@ const PhotoGallery = ({ photos }: { photos: string[]}) => {
           </div>
         ))}
 
-        {photos.length > 4 && (
+        {photos.length > photoGallerySize && (
           <div
             className="w-36 h-36 bg-white border border-gray-300 flex justify-center items-center cursor-pointer hover:shadow-md"
             onClick={() => setIsModalVisible(true)}
@@ -38,10 +44,13 @@ const PhotoGallery = ({ photos }: { photos: string[]}) => {
         title="Photo Gallery"
         open={isModalVisible}
         footer={null}
-        onCancel={() => setIsModalVisible(false)}
+        onCancel={() => {
+          setIsModalVisible(false);
+          setPreviewImage(null);
+        }}
         width={800}
       >
-         <PreviewGroup>
+        <PreviewGroup>
           <Row gutter={[16, 16]}>
             {photos.map((url, index) => (
               <Col key={index} span={6}>
@@ -49,7 +58,7 @@ const PhotoGallery = ({ photos }: { photos: string[]}) => {
                   alt={`photo-${index}`}
                   src={url}
                   onClick={() => setPreviewImage(url)}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: "pointer" }}
                 />
               </Col>
             ))}
@@ -59,7 +68,7 @@ const PhotoGallery = ({ photos }: { photos: string[]}) => {
 
       {previewImage && (
         <Modal
-          open={!!previewImage}
+          open={!!previewImage && !isModalVisible}
           footer={null}
           onCancel={() => setPreviewImage(null)}
         >

@@ -19,26 +19,27 @@ const AppWrapper = ({
   const [menuItems, setMenuItems] = useState<any[]>([]);
   const navigate = useNavigate();
 
-  const [visible, setVisible] = useState(false);
-
-  const { notifications } = useNotifications();
+  const { notifications, markAsRead } = useNotifications();
   const { id: currentUserId } = useAuth();
 
   var unreadCount = notifications.filter(
     (notification) =>
       notification.userId === currentUserId && !notification.read
-  ).length;
+  );
 
   const handleBellClick = () => {
-    if(unreadCount > 0 ){
-      unreadCount = 0;
+    if(unreadCount.length > 0 ){
+      markAsRead(notifications.findIndex(x => x.userId === currentUserId));
+      unreadCount = [];
     }
     setVisible(!visible);
   };
 
+  const [visible, setVisible] = useState(unreadCount.length > 0);
+
   const content = (
     <div style={{ padding: "10px" }}>
-      {unreadCount > 0 ? (
+      {unreadCount.length > 0 ? (
         <p>Hey, you have another booking! Check your bookings.</p>
       ) : (
         <p>Hey, there aren't any new bookings!</p>
@@ -55,10 +56,6 @@ const AppWrapper = ({
       {
         key: "services",
         label: <Button onClick={() => navigate("/services")}>Services </Button>,
-      },
-      {
-        key: "contact",
-        label: <Button onClick={() => navigate("/contact")}>Contact </Button>,
       },
     ];
 
@@ -83,13 +80,13 @@ const AppWrapper = ({
             <>
               <Popover content={content} trigger="click" placement="bottom">
                 <Badge
-                  count={unreadCount}
+                  count={visible ? unreadCount.length : 0}
                   overflowCount={99}
                   style={{ backgroundColor: "red" }}
                 >
                   <BellOutlined
                     style={{ fontSize: "24px", color: "white" }}
-                    onClick={() => handleBellClick}
+                    onClick={() => handleBellClick()}
                   />
                 </Badge>
               </Popover>
@@ -106,7 +103,10 @@ const AppWrapper = ({
               items: [
                 {
                   key: "logout",
-                  label: <Button onClick={() => logout()}>Log out</Button>,
+                  label: <Button onClick={() => {
+                    logout();
+                    navigate("/login");
+                  }}>Log out</Button>,
                 },
               ],
             }}
@@ -174,17 +174,42 @@ const AppWrapper = ({
         />
       </Header>
       {children}
-      <Footer className="h-[300px] bg-black text-white flex flex-col justify-center items-center gap-5">
-        <Title className="text-white">Stay updated.</Title>
-        <p>Get notified of new services from your inbox.</p>
-        <div className="flex gap-[30px] items-center ml-[10%]">
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your email"
-            className="w-[700px] text-gray-500 pl-2.5 rounded"
-          />
-          <Button size="large">Subscribe</Button>
+      <Footer className="bg-black text-white flex flex-col justify-center items-center gap-5">
+      <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 className="font-bold text-lg mb-4">Contact Us</h3>
+                    <p>📞 Phone: (123) 456-7890</p>
+                    <p>📧 Email: <a href="mailto:support@homemaintenance.com" className="text-blue-600">support@homemaintenance.com</a></p>
+                    <p>🌐 Website: <a href="https://www.homemaintenance.com" className="text-blue-600">www.homemaintenance.com</a></p>
+                </div>
+                <div>
+                    <h3 className="font-bold text-lg mb-4">Services Offered</h3>
+                    <ul>
+                        <li>Plumbing</li>
+                        <li>Electrical Work</li>
+                        <li>HVAC Maintenance</li>
+                        <li>Cleaning Services</li>
+                        <li>Handyman Services</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 className="font-bold text-lg mb-4">Helpful Links</h3>
+                    <ul>
+                        <li><a href="#" className="text-blue-600">About Us</a></li>
+                        <li><a href="#" className="text-blue-600">FAQs</a></li>
+                        <li><a href="#" className="text-blue-600">Terms of Service</a></li>
+                        <li><a href="#" className="text-blue-600">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div className="mt-8">
+                <h3 className="font-bold text-lg mb-4">Stay Informed</h3>
+                <form action="#" method="POST" className="flex">
+                    <input type="email" placeholder="Your Email" required className="text-black border rounded-l py-2 px-4 w-full" />
+                    <button type="submit" className="bg-blue-500 text-white rounded-r py-2 px-4 hover:bg-blue-700">Subscribe</button>
+                </form>
+            </div>
         </div>
       </Footer>
     </Layout>

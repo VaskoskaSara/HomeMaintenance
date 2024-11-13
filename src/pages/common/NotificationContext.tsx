@@ -1,9 +1,9 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 
 interface Notification {
-    userId: string; // ID of the employee to notify
-    message: string; // Notification message
-    read: boolean; // Flag to indicate if the notification has been read
+    userId: string;
+    message: string;
+    read: boolean;
 }
 
 interface NotificationContextType {

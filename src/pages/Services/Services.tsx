@@ -189,13 +189,13 @@ const Services: React.FC = () => {
               {employees?.map((employee: any) => (
                 <Col className="mb-[20px]">
                   <Card
-                    className="w-[250px] w-[80%] shadow-[6px_5px_30px_rgba(0,0,0,0.5)] h-full card-style"
+                    className="w-[250px] w-[80%] shadow-[6px_5px_30px_rgba(0,0,0,0.5)] h-full bg-gray-200 card-style"
                     hoverable
                     cover={
                       <img
                         alt="example"
                         src={employee.avatar}
-                        className="h-[200px] object-cover"
+                        className="h-[200px] object-contain bg-gray-100"
                       />
                     }
                   >
@@ -207,13 +207,16 @@ const Services: React.FC = () => {
                         )?.positionName
                       }
                     </Title>
-                    <Rate disabled defaultValue={2} />
+                    <Row>
+                    <Rate disabled defaultValue={employee.rating.rating} />    
+                    <Title level={5} className="ml-[8px] mt-[-3px]">({employee.rating.numberOfReviews})</Title>
+                    </Row>
                     <Typography className="text-[16px]">
                       Experience: {employee.experience} months
                     </Typography>
                     <Typography className="text-[16px]">
                       Payment:{" "}
-                      {employee.price ? `${employee.price}/h` : "By Contract"}
+                      {employee.price ? `${employee.price}/h` : "By contract"}
                     </Typography>
                     <Typography className="text-[16px]">
                       City: {employee.city}

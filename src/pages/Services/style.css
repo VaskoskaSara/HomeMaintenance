@@ -22,8 +22,9 @@ input[type=number] {
 }
 
 .card-style > .ant-card-body {
-  background-color: rgb(243, 243, 243);
   padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 #service-aside {

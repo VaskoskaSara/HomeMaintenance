@@ -11,12 +11,13 @@ import "./style.css";
 import AddReviewModal from "../AddReview/AddReview";
 import useReviewModalHook from "../AddReview/AddReview.helper";
 import { useNotifications } from "../common/NotificationContext";
+import { useAuth } from "../common/AuthContext";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
 
-  const { handleClose, isModalVisible, setIsModalVisible } =
-    useReviewModalHook();
+  const { id } = useAuth();
+  const { handleClose, isModalVisible, setIsModalVisible } = useReviewModalHook(id as string);
   const { reviews } = useNotifications();
 
   useEffect(() => {

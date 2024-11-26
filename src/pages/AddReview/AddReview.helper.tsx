@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getBookingsByUser } from "../ViewBookings/ViewBookings.helper";
 const useReviewModalHook = (id: string) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { bookings, isLoading } = getBookingsByUser(id);
+  const { bookings, isLoading, mutate } = getBookingsByUser(id);
 
 
   const handleClose = async () => {
@@ -19,7 +19,8 @@ const useReviewModalHook = (id: string) => {
     setIsModalVisible,
     showModal,
     bookings,
-    isLoading
+    isLoading,
+    mutate
   };
 };
 

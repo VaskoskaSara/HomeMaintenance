@@ -7,6 +7,7 @@ import {
   notification,
   Rate,
   Tabs,
+  Typography,
   Upload,
 } from "antd";
 import { useState } from "react";
@@ -14,22 +15,22 @@ import { postFormFetcher } from "src/api/apiCommand";
 import useSWRMutation from "swr/mutation";
 import { useAuth } from "../common/AuthContext";
 import { useNotifications } from "../common/NotificationContext";
+import moment from "moment";
 
 const { TabPane } = Tabs;
 
 const AddReviewModal = ({
   isVisible,
-  onClose,
-  notifications,
+  onClose
 }: {
   isVisible: boolean;
   onClose: () => void;
-  notifications: any[];
 }) => {
   const [form] = Form.useForm();
   const [rating, setRating] = useState(0);
   const [fileList, setFileList] = useState([]);
   const { id } = useAuth();
+  const { Text } = Typography;
 
   const { setReviews, reviews } = useNotifications();
 
@@ -39,7 +40,12 @@ const AddReviewModal = ({
 
   const { trigger } = useSWRMutation("/api/user/submitReview", postFormFetcher);
 
-  const handleSubmit = (values: any, paymentId: number, employeeId: string) => {
+  const handleSubmit = (
+    values: any,
+    paymentId: number,
+    employeeId: string,
+    userPaymentId: string
+  ) => {
     const formDataToSend = new FormData();
 
     const filteredModel = Object.entries(values)
@@ -58,6 +64,7 @@ const AddReviewModal = ({
     formDataToSend.append("userId", id as any);
     formDataToSend.append("employeeId", employeeId as any);
     formDataToSend.append("paymentId", paymentId as any);
+    formDataToSend.append("userPaymentId", userPaymentId as any);
 
     fileList.forEach((file: any) => {
       if (file.originFileObj) {
@@ -84,11 +91,10 @@ const AddReviewModal = ({
       });
 
     form.resetFields();
+    setFileList([]);
     const newReviews = reviews.filter(
       (x: any) =>
-        x.employeeId !== employeeId &&
-        x.userId !== id &&
-        paymentId !== x.paymentId
+        userPaymentId !== x.userPaymentId
     );
     setReviews(newReviews);
 
@@ -105,8 +111,12 @@ const AddReviewModal = ({
       footer={null}
       style={{ minWidth: "600px" }}
     >
-      <Tabs defaultActiveKey="1">
-        {notifications.map((item, index) => (
+      <Tabs defaultActiveKey="1" onTabClick={()=> {
+        form.resetFields();
+        setFileList([]);
+        setRating(0);
+      }}>
+        {reviews.map((item: any, index: number) => (
           <TabPane tab={`Add Review for ${item.employeeName}`} key={index}>
             <Form
               form={form}
@@ -114,12 +124,17 @@ const AddReviewModal = ({
                 handleSubmit(
                   form.getFieldsValue(true),
                   item.paymentId,
-                  item.employeeId
+                  item.employeeId,
+                  item.userPaymentId
                 )
               }
               layout="vertical"
             >
-              <Form.Item name="rating">
+              <Text>{moment.utc(item.startDate).format('YYYY/MM/DD')}</Text> - <Text>{moment.utc(item.endDate).format('YYYY/MM/DD')}</Text>
+              <Form.Item
+                name="rating"
+                rules={[{ required: true, message: "Please select a rating!" }]}
+              >
                 <Rate onChange={setRating} value={rating} />
               </Form.Item>
 

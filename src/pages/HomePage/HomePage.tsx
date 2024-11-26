@@ -101,7 +101,6 @@ const HomePage: React.FC = () => {
             <AddReviewModal
               isVisible={isModalVisible}
               onClose={handleClose}
-              notifications={reviews}
             />
           </Content>
         </Layout>

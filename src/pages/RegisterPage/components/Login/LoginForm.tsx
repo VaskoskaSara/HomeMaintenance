@@ -26,18 +26,17 @@ export function LoginForm() {
     trigger(allValues)
       .then((res: any) => {
         login(res.id, res.userRole, res.avatar);
+        navigate("/");
+        setLoading(false);
         notification.success({
           message: "Login Successful",
           description: "You have successfully login. Welcome!",
           placement: "topLeft",
           duration: 5,
         });
-
-        setTimeout(() => {
-          setReviews(res.notifications ? res.notifications : []);
-          navigate("/");
-          setLoading(false);
-        }, 5000);
+        setReviews(res.notifications ? res.notifications : []);
+        navigate("/");
+        setLoading(false);
       })
       .catch(() => {
         notification.error({

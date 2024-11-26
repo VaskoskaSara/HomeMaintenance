@@ -165,11 +165,8 @@ export function RegisterForm() {
           placement: 'topRight',
           duration: 5
         });
-  
-        setTimeout(() => {
-          navigate('/');
-          setLoading(false);
-        }, 5000);
+        navigate('/');
+        setLoading(false);
       }).catch((ex : CustomError) => {
         notification.error({
           message: 'Some error was happened',
@@ -194,6 +191,8 @@ export function RegisterForm() {
               >
                 <Input placeholder="Enter full name" />
               </Form.Item>
+              <Row gutter={16}>
+                <Col span={12}>
               <Form.Item
                 name="city"
                 label="City"
@@ -201,6 +200,17 @@ export function RegisterForm() {
               >
                 <Input placeholder="Enter your city" />
               </Form.Item>
+              </Col>
+              <Col span={12}>
+              <Form.Item
+                name="address"
+                label="Address"
+                rules={[{ required: true, message: "Address is required" }]}
+              >
+                <Input placeholder="Enter your address" />
+              </Form.Item>
+              </Col>
+              </Row>
             <Row gutter={16}>
             <Col span={12}>
               <Form.Item

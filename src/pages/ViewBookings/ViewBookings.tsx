@@ -1,12 +1,12 @@
 import { Button, Col, Row, Spin, Table } from "antd";
 import Title from "antd/es/typography/Title";
-import { useState } from "react";
 import AddReviewModal from "../AddReview/AddReview";
 import useReviewModalHook from "../AddReview/AddReview.helper";
 import AppWrapper from "../common/AppWrapper/AppWrapper";
 import { useAuth } from "../common/AuthContext";
 import { columns } from "../EmployeeBookingMngm/EmployeeBookingMng.helper";
 import { NotificationDto } from "./ViewBookings.helper";
+import { useNotifications } from "../common/NotificationContext";
 
 const ViewBookings: React.FC = () => {
   const { id } = useAuth();
@@ -16,15 +16,15 @@ const ViewBookings: React.FC = () => {
     handleClose,
     showModal,
     bookings,
-    isLoading
+    isLoading,
+    mutate,
   } = useReviewModalHook(id as string);
 
-  const [notifications, setNotifications] = useState<NotificationDto[] | any[]>(
-    []
-  );
+  const { setReviews } = useNotifications();
 
   const handleModalClose = async () => {
     await handleClose();
+    mutate();
   };
 
   const additionalColumns = [
@@ -39,11 +39,12 @@ const ViewBookings: React.FC = () => {
               color="blue"
               type="dashed"
               onClick={() => {
-                setNotifications([
+                setReviews([
                   {
                     employeeName: record.fullName,
                     employeeId: record.employeeId,
                     paymentId: record.paymentId,
+                    userPaymentId: record.userPaymentId,
                   } as NotificationDto,
                 ]);
 
@@ -77,7 +78,6 @@ const ViewBookings: React.FC = () => {
             <AddReviewModal
               isVisible={isModalVisible}
               onClose={handleModalClose}
-              notifications={notifications}
             />
           </Row>
         )}

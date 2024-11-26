@@ -1,7 +1,6 @@
 import { BellOutlined } from "@ant-design/icons";
 import { Avatar, Badge, Button, Dropdown, Layout, Menu, Popover } from "antd";
 import { Footer, Header } from "antd/es/layout/layout";
-import Title from "antd/es/typography/Title";
 import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
@@ -28,8 +27,8 @@ const AppWrapper = ({
   );
 
   const handleBellClick = () => {
-    if(unreadCount.length > 0 ){
-      markAsRead(notifications.findIndex(x => x.userId === currentUserId));
+    if (unreadCount.length > 0) {
+      markAsRead(notifications.findIndex((x) => x.userId === currentUserId));
       unreadCount = [];
     }
     setVisible(!visible);
@@ -103,10 +102,16 @@ const AppWrapper = ({
               items: [
                 {
                   key: "logout",
-                  label: <Button onClick={() => {
-                    logout();
-                    navigate("/login");
-                  }}>Log out</Button>,
+                  label: (
+                    <Button
+                      onClick={() => {
+                        logout();
+                        navigate("/login");
+                      }}
+                    >
+                      Log out
+                    </Button>
+                  ),
                 },
               ],
             }}
@@ -156,7 +161,7 @@ const AppWrapper = ({
         >
           <img
             src={
-              "https://homemaintenanceapp.s3.amazonaws.com/logo.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIA2UC26MP7SOPGX4IG%2F20241019%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241019T164241Z&X-Amz-Expires=300&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEPn%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIQDBNGj3tZ6vPQVVNJrw3h5tiyflhuE5DsuuKCQl7quTswIgbwAA5J1vb3HPK7SUDc4ilJEuQwb7uKD843sChuLXPRIq6AIIYhAAGgw3MzAzMzUxNzU2NzkiDPu2qL5nW6dIlvbAoyrFAmJd8LvE9ZAXo8GCVVO7K6VUR2zY4TdrB%2Bl28ANRhKAysWp2o2ypLWh5%2Fw2wdIeYlMcZ4%2BOlJzjEYmmrIJUXoGXGN1zu5vm8xVx6XtAFA7Eq%2BNy%2BH6GbNrtpRfs0wvVjgo1iqlgwd6JYfw8jMRwMGX4Mc8c4smAZJnaBUqwqhCfVxtqK%2FLTVOhCD4Zp1X%2FfKNrX%2BvVdIrsjoq%2Fc1I5eVzBmuzrgCLaYN%2BjWWMOdHPBZEcRJ3E5xyQHsCPUfmVp6ARusoal4bu25Mv56lh7g1IfdkfvLVMifIhKlK8Bha8OeD%2BD0DL5E8JAiJ1jPPfAj8yCjXGdi5E0L5UUaoZ57GVKF7cvqKlE03ZN3DI7qmOGjcWNMw9kJXxE9PyP1oD%2BBhR5h3rvfWf7sn%2BZjvmTYJtK25U2T%2Bu0XqJtNGpJxkIJlQSAcKkXQwpsLPuAY6swLsdVUP8rNvCAnVPLBLWKzYpHAMNs9eKkxNPpRKLSjqcr9ToTsz5f5bQoHaEocb22wIah1RY0ozIRhRhzsubCc%2FBASc2RyTQNpn7B5krz7SyMRbhZBLMn5hEKFdUrKOWc%2BZJCA%2FUTfCu%2FFLVfJXU4lAY157Dbn2pKHejxc4yZl6J4vWQyp4DGnb0MU4OokCW9yjjpBMSSorTUpdbmKQf8DkV12r0sWr4sF8HpdmcsUnyLy%2Bn24Y1YVgim4%2FHNvPJFBgb5JfYTACVeCGi5mnNsRHV9EBA2NACsP65HTfKztzVneCQkTwwYpuq3HiBRf1f48v%2FrHiPp6J8xsFnPx%2B%2BgKIYpu%2FGHxWerKJIPEsxWsjeg9r3KVNhJLcijFmymfuu%2FY8K%2BRhaTStXmJca4PzGX8J8fn9&X-Amz-Signature=cb9462fb01e80c27bcacd3f9a422d09a1dff50f0eb70ab3b72925a2e33ee305c&X-Amz-SignedHeaders=host&response-content-disposition=inline"
+              "https://homemaintenanceapp.s3.us-east-1.amazonaws.com/logo.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIA2UC26MP7VFUFHETX%2F20241113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241113T234325Z&X-Amz-Expires=300&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFgaCXVzLWVhc3QtMSJGMEQCIHDfW6lLU9X%2FM1ptY4MpT6HN3WtW8SD5p8vc4bYqYWixAiBCTKZuaFq6z6dwfn7YPNBnKs9AzgwYfAmIqdZJNkdp8SrxAgjh%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDczMDMzNTE3NTY3OSIMr42JHx9%2Be0PFUfWsKsUCK1yP88N7lirloB0ToZEXa3hTysfvKbp5g4Qc3WER4pGeQQUsvPUDjVwndDdboaT2L5cyMIdIhfB5ZZQvkuJTWjDIdUZiARn2rf08Y%2Bsot5vkWaOSOHnwinziuzkj74k1ymM5tZR5fyff%2FBHlOwz%2BtMS8YvCleRkN1aZMQ5eVKeeZZ73i82SQNErMYDQbaVflhcuXcXOoJWq20P4wFiDW0mCExENQ%2Fu8Wd0x%2F7BoC5pAvqJFgupXhqZO9KGbbZuTfEnz9G%2BrCwRUgu6%2F7kbNMqA%2BtHOxHH11EKSl9QCC8YI6nWwnrMaDAEM%2F1qVBUmsYq7dhP8MAzNGeGGHaNf9oeBc21B%2Fl3naY%2FWfZ8oGhULxlkujsbXl2OoGj%2FmlHZPvIiJL7N6wyd6FLejs3vK3LseC%2Bs9RRdtfAFwYEP97z9agfSVx3NZjDf6dS5Bjq0As%2F4oE%2BDqzmkxXF7wlphX0cq0%2B5qcSRUmrPvAYI9EdMowAPO%2BTOKrRi%2FpkAWdqoNTacKI30FPaQnQzarOFati4LU7%2FhOohuBMJaTmGRldMmVHHc%2Fxs0NukS75%2B7xwYadZSSOd7TpDVelQgIxsIkg1b%2FTzOO93yOnulljnpOcgzIc0Dr8gSaTxjVHZKTtuPELoY%2FQXXnBDRZR1Oi5sJqpoGY5SWOzWDYsFAqQf89%2FIoZKtHBexXtGjMnCX1VNU0Md4R2YJpSIwtamksbuu1%2BwixT2cpmabgFryRY7hTBcufBSvrDwc2Q6RrBffCGiYKars31xufIWMz%2BbGYBNY75sudvmU434SpnHEbXMYIVAPHb%2FxzEksGoWLLHceDth8tPhJgp8JU7b%2BGdc9I1ir%2FZVYNozTBJY&X-Amz-Signature=9a62c77770121deea27a995bcbb4d38a408db25648f19f7e13e47a815bb8f577&X-Amz-SignedHeaders=host&response-content-disposition=inline"
             }
             alt="Logo"
             style={{ width: "40px", height: "40px", marginRight: "8px" }}
@@ -175,41 +180,83 @@ const AppWrapper = ({
       </Header>
       {children}
       <Footer className="bg-black text-white flex flex-col justify-center items-center gap-5">
-      <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                    <h3 className="font-bold text-lg mb-4">Contact Us</h3>
-                    <p>📞 Phone: (123) 456-7890</p>
-                    <p>📧 Email: <a href="mailto:support@homemaintenance.com" className="text-blue-600">support@homemaintenance.com</a></p>
-                    <p>🌐 Website: <a href="https://www.homemaintenance.com" className="text-blue-600">www.homemaintenance.com</a></p>
-                </div>
-                <div>
-                    <h3 className="font-bold text-lg mb-4">Services Offered</h3>
-                    <ul>
-                        <li>Plumbing</li>
-                        <li>Electrical Work</li>
-                        <li>HVAC Maintenance</li>
-                        <li>Cleaning Services</li>
-                        <li>Handyman Services</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 className="font-bold text-lg mb-4">Helpful Links</h3>
-                    <ul>
-                        <li><a href="#" className="text-blue-600">About Us</a></li>
-                        <li><a href="#" className="text-blue-600">FAQs</a></li>
-                        <li><a href="#" className="text-blue-600">Terms of Service</a></li>
-                        <li><a href="#" className="text-blue-600">Privacy Policy</a></li>
-                    </ul>
-                </div>
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <h3 className="font-bold text-lg mb-4">Contact Us</h3>
+              <p>📞 Phone: (123) 456-7890</p>
+              <p>
+                📧 Email:{" "}
+                <a
+                  href="mailto:support@homemaintenance.com"
+                  className="text-blue-600"
+                >
+                  support@homemaintenance.com
+                </a>
+              </p>
+              <p>
+                🌐 Website:{" "}
+                <a
+                  href="https://www.homemaintenance.com"
+                  className="text-blue-600"
+                >
+                  www.homemaintenance.com
+                </a>
+              </p>
             </div>
-            <div className="mt-8">
-                <h3 className="font-bold text-lg mb-4">Stay Informed</h3>
-                <form action="#" method="POST" className="flex">
-                    <input type="email" placeholder="Your Email" required className="text-black border rounded-l py-2 px-4 w-full" />
-                    <button type="submit" className="bg-blue-500 text-white rounded-r py-2 px-4 hover:bg-blue-700">Subscribe</button>
-                </form>
+            <div>
+              <h3 className="font-bold text-lg mb-4">Services Offered</h3>
+              <ul>
+                <li>Plumbing</li>
+                <li>Electrical Work</li>
+                <li>HVAC Maintenance</li>
+                <li>Cleaning Services</li>
+                <li>Handyman Services</li>
+              </ul>
             </div>
+            <div>
+              <h3 className="font-bold text-lg mb-4">Helpful Links</h3>
+              <ul>
+                <li>
+                  <a href="/" className="text-blue-600">
+                    About Us
+                  </a>
+                </li>
+                <li>
+                  <a href="/" className="text-blue-600">
+                    FAQs
+                  </a>
+                </li>
+                <li>
+                  <a href="/" className="text-blue-600">
+                    Terms of Service
+                  </a>
+                </li>
+                <li>
+                  <a href="/" className="text-blue-600">
+                    Privacy Policy
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-8">
+            <h3 className="font-bold text-lg mb-4">Stay Informed</h3>
+            <form action="#" method="POST" className="flex">
+              <input
+                type="email"
+                placeholder="Your Email"
+                required
+                className="text-black border rounded-l py-2 px-4 w-full"
+              />
+              <button
+                type="submit"
+                className="bg-blue-500 text-white rounded-r py-2 px-4 hover:bg-blue-700"
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
         </div>
       </Footer>
     </Layout>

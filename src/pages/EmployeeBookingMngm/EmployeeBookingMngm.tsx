@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { postJsonFetcher } from "src/api/apiCommand";
 import useSWRMutation from "swr/mutation";
 import AppWrapper from "../common/AppWrapper/AppWrapper";
+import { useAuth } from "../common/AuthContext";
 import {
   checkForBooked,
   colors,
@@ -24,9 +25,8 @@ import {
   setBookedDays,
   setDisabledDays,
 } from "./EmployeeBookingMng.helper";
-import { useAuth } from "../common/AuthContext";
 
-const EmployeeBookingMngm: React.FC = ({}) => {
+const EmployeeBookingMngm: React.FC = () => {
   const { id } = useAuth();
   const [selectedDates, setSelectedDates] = useState<Dayjs[]>([]);
   const [availability, setAvailability] = useState<any>({

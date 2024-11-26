@@ -1,3 +1,4 @@
+import { PaymentType } from "../RegisterPage/components/Register/RegisterForm.props";
 
 export type Employee = {
     id: string;
@@ -8,6 +9,7 @@ export type Employee = {
     price: number | null;
     avatar: string;
     rating: RatingObject;
+    paymentType: PaymentType;
 }
 
 type RatingObject = {

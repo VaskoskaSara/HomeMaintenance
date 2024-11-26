@@ -5,16 +5,16 @@ import { ApiResponse } from "../RegisterPage/RegisterPage.props";
 
 export function getBookingsByUser(id: string) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { data: bookings, isLoading } = useSWR<ApiResponse<BookingMng[]>>(
+  const { data: bookings, isLoading, mutate } = useSWR<ApiResponse<BookingMng[]>>(
     `/api/user/view-bookings/${id}`,
     getFetcher,
     {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
     }
   );
 
-  return { bookings, isLoading };
+  return { bookings, isLoading, mutate };
 }
 
 export type NotificationDto = {

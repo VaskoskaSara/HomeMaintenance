@@ -1,4 +1,4 @@
-import { Button, message } from "antd";
+import { message } from "antd";
 import { eachDayOfInterval, format } from "date-fns";
 import dayjs from "dayjs";
 import { getFetcher } from "src/api/apiQuery";
@@ -39,6 +39,10 @@ export const columns = [
       `${new Date(text).toLocaleDateString()} ${new Date(
         text
       ).toLocaleTimeString()}`,
+  },
+  {
+    title: "Address",
+    dataIndex: "address",
   }
 ];
 

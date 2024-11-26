@@ -71,7 +71,7 @@ const BookingComponent: React.FC<EmployeeBooking> = ({
 
   useEffect(() => {
     if (!isLoadingDisabledDates && !isLoadingBookingDays && employeeDisabledDates && bookedDays) {
-      setDisabledDates([...employeeDisabledDates?.data, ... bookedDays.data]);
+      setDisabledDates([...employeeDisabledDates?.data, ...bookedDays.data]);
     }
   }, [isLoadingDisabledDates, isLoadingBookingDays]);
 

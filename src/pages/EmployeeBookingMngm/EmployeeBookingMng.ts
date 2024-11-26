@@ -6,4 +6,6 @@ export type BookingMng = {
     startDateTime: Date;
     endDateTime: Date;
     isEmployeeReviewed: boolean;
+    userPaymentId: string;
+    address: string;
 }

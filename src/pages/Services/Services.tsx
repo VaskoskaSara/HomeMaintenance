@@ -25,6 +25,7 @@ import CategoriesModal from "./components/CategoriesModal";
 import { postJsonFetcher } from "src/api/apiCommand";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../common/AuthContext";
+import { getPaymentTypeText } from "../ServiceDetails/components/ServiceDetails.helper";
 
 const { Option } = Select;
 
@@ -171,7 +172,10 @@ const Services: React.FC = () => {
               </div>
             </div>
           </Sider>
-          <div className="pt-2 px-5 pb-7 w-full" style={{height: 'fit-content'}}>
+          <div
+            className="pt-2 px-5 pb-7 w-full"
+            style={{ height: "fit-content" }}
+          >
             <Button
               className="filterByCategoriesBtn"
               onClick={() => setVisible(true)}
@@ -189,7 +193,7 @@ const Services: React.FC = () => {
               {employees?.map((employee: any) => (
                 <Col className="mb-[20px]">
                   <Card
-                    className="w-[250px] w-[80%] shadow-[6px_5px_30px_rgba(0,0,0,0.5)] h-full bg-gray-200 card-style"
+                    className="w-[250px] w-[80%] shadow-[6px_5px_30px_rgba(0,0,0,0.5)] h-full bg-gray-200 card-style flex flex-col"
                     hoverable
                     cover={
                       <img
@@ -208,21 +212,27 @@ const Services: React.FC = () => {
                       }
                     </Title>
                     <Row>
-                    <Rate disabled defaultValue={employee.rating.rating} />    
-                    <Title level={5} className="ml-[8px] mt-[-3px]">({employee.rating.numberOfReviews})</Title>
+                      <Rate disabled defaultValue={employee.rating.rating} />
+                      <Title level={5} className="ml-[8px] mt-[-3px]">
+                        ({employee.rating.numberOfReviews})
+                      </Title>
                     </Row>
                     <Typography className="text-[16px]">
                       Experience: {employee.experience} months
                     </Typography>
                     <Typography className="text-[16px]">
                       Payment:{" "}
-                      {employee.price ? `${employee.price}/h` : "By contract"}
+                      {employee.price
+                        ? `${employee.price}${getPaymentTypeText(
+                            employee.paymentType
+                          )}`
+                        : `${getPaymentTypeText(employee.paymentType!)}`}
                     </Typography>
                     <Typography className="text-[16px]">
                       City: {employee.city}
                     </Typography>
                     <Button
-                      className="mt-5 bg-black text-white"
+                      className="bg-black text-white mt-auto"
                       onClick={() => navigate(`/services/${employee.id}`)}
                     >
                       Details

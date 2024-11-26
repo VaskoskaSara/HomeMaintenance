@@ -22,6 +22,7 @@ export interface RegisterFormObject {
     avatar: File;
     photos: File[];
     newPosition: string | null;
+    address: string;
 }
 
 export interface CustomError {

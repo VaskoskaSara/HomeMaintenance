@@ -190,7 +190,8 @@ const Services: React.FC = () => {
               categoryIds={categoryIds}
             />
             <Row className="w-full relative grid grid-cols-4 pt-2 px-5 pb-[3rem] top-[10%]">
-              {employees?.map((employee: any) => (
+            {(employees.length > 0) ?
+              employees.map((employee: any) => (
                 <Col className="mb-[20px]">
                   <Card
                     className="w-[250px] w-[80%] shadow-[6px_5px_30px_rgba(0,0,0,0.5)] h-full bg-gray-200 card-style flex flex-col"
@@ -239,7 +240,9 @@ const Services: React.FC = () => {
                     </Button>
                   </Card>
                 </Col>
-              ))}
+              ))
+              :
+              <p>Currently there are not avaliable any service.</p>}
             </Row>
           </div>
         </Content>

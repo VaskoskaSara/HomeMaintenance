@@ -416,7 +416,7 @@ export function RegisterForm() {
 
                     <Col span={12}>
                       <Form.Item
-                        label="Price"
+                        label="Price($)"
                         name="price"
                         rules={[
                           {

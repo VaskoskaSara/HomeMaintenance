@@ -154,15 +154,13 @@ const AppWrapper = ({
 
   return (
     <Layout className={`min-h-screen ${className}`}>
-      <Header className="bg-black flex justify-between items-center">
+      <Header id="headerId" className="bg-black flex justify-between items-center">
         <div
           className="flex items-center cursor-pointer"
           onClick={() => navigate("/")}
         >
           <img
-            src={
-              "https://homemaintenanceapp.s3.us-east-1.amazonaws.com/logo.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIA2UC26MP7VFUFHETX%2F20241113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241113T234325Z&X-Amz-Expires=300&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFgaCXVzLWVhc3QtMSJGMEQCIHDfW6lLU9X%2FM1ptY4MpT6HN3WtW8SD5p8vc4bYqYWixAiBCTKZuaFq6z6dwfn7YPNBnKs9AzgwYfAmIqdZJNkdp8SrxAgjh%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDczMDMzNTE3NTY3OSIMr42JHx9%2Be0PFUfWsKsUCK1yP88N7lirloB0ToZEXa3hTysfvKbp5g4Qc3WER4pGeQQUsvPUDjVwndDdboaT2L5cyMIdIhfB5ZZQvkuJTWjDIdUZiARn2rf08Y%2Bsot5vkWaOSOHnwinziuzkj74k1ymM5tZR5fyff%2FBHlOwz%2BtMS8YvCleRkN1aZMQ5eVKeeZZ73i82SQNErMYDQbaVflhcuXcXOoJWq20P4wFiDW0mCExENQ%2Fu8Wd0x%2F7BoC5pAvqJFgupXhqZO9KGbbZuTfEnz9G%2BrCwRUgu6%2F7kbNMqA%2BtHOxHH11EKSl9QCC8YI6nWwnrMaDAEM%2F1qVBUmsYq7dhP8MAzNGeGGHaNf9oeBc21B%2Fl3naY%2FWfZ8oGhULxlkujsbXl2OoGj%2FmlHZPvIiJL7N6wyd6FLejs3vK3LseC%2Bs9RRdtfAFwYEP97z9agfSVx3NZjDf6dS5Bjq0As%2F4oE%2BDqzmkxXF7wlphX0cq0%2B5qcSRUmrPvAYI9EdMowAPO%2BTOKrRi%2FpkAWdqoNTacKI30FPaQnQzarOFati4LU7%2FhOohuBMJaTmGRldMmVHHc%2Fxs0NukS75%2B7xwYadZSSOd7TpDVelQgIxsIkg1b%2FTzOO93yOnulljnpOcgzIc0Dr8gSaTxjVHZKTtuPELoY%2FQXXnBDRZR1Oi5sJqpoGY5SWOzWDYsFAqQf89%2FIoZKtHBexXtGjMnCX1VNU0Md4R2YJpSIwtamksbuu1%2BwixT2cpmabgFryRY7hTBcufBSvrDwc2Q6RrBffCGiYKars31xufIWMz%2BbGYBNY75sudvmU434SpnHEbXMYIVAPHb%2FxzEksGoWLLHceDth8tPhJgp8JU7b%2BGdc9I1ir%2FZVYNozTBJY&X-Amz-Signature=9a62c77770121deea27a995bcbb4d38a408db25648f19f7e13e47a815bb8f577&X-Amz-SignedHeaders=host&response-content-disposition=inline"
-            }
+            src="/logo.jpg"
             alt="Logo"
             style={{ width: "40px", height: "40px", marginRight: "8px" }}
           />

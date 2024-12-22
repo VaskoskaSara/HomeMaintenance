@@ -3,3 +3,8 @@
   height: inherit;
   display: inline-table !important;
 }
+
+#headerId .menu-items li {
+  background-color: rgb(0,0,0, 0) !important;
+}
+

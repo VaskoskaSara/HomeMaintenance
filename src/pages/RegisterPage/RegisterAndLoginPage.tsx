@@ -22,6 +22,9 @@ function RegisterPage() {
     if (location.pathname.endsWith("register")) {
       container!.classList.add("right-panel-active");
     }
+    else{
+      container!.classList.remove("right-panel-active");
+    }
 
     signUpButton!.addEventListener("click", () => {
       container!.classList.add("right-panel-active");

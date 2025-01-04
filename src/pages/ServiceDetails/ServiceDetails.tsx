@@ -3,24 +3,24 @@ import { Content } from "antd/es/layout/layout";
 import { useParams } from "react-router-dom";
 import { getFetcher } from "src/api/apiQuery";
 import useSWR from "swr";
-import AppWrapper from "../common/AppWrapper/AppWrapper";
+import AppWrapper from "src/components/AppWrapper";
 import { ApiResponse } from "../RegisterPage/RegisterPage.props";
 import { EmployeeDetails } from "../Services/Services.types";
 import "../Services/style.css";
-import BookingComponent from "./components/BookingComponent";
+import BookingComponent from "./components/BookingComponent/BookingComponent";
 import PhotoGallery from "./components/PhotoGalery";
 import "./style.css";
-import { useAuth } from "../common/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import ReviewsComponent from "./components/ReviewsComponent";
-import { getPaymentTypeText } from "./components/ServiceDetails.helper";
+import { getPaymentTypeText } from "./ServiceDetails.helper";
 
 const ServiceDetails: React.FC = () => {
   const { id } = useParams();
   const { Title, Text } = Typography;
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, role } = useAuth();
 
-  const { data: employee, isLoading } = useSWR<ApiResponse<EmployeeDetails>>(
-    `/api/user/employee/${id}`,
+  const { data: employee, error, isLoading } = useSWR<ApiResponse<EmployeeDetails>>(
+    `/api/employee/${id}`,
     getFetcher,
     {
       revalidateOnFocus: false,
@@ -38,6 +38,36 @@ const ServiceDetails: React.FC = () => {
     );
   }
 
+  if (error) {
+    return (
+      <AppWrapper>
+        <Content className="self-center content-center">
+          <Typography.Text type="danger">Failed to load employee details.</Typography.Text>
+        </Content>
+      </AppWrapper>
+    );
+  }
+
+  const { data } = employee ?? {};
+
+  if (!data) return null;
+
+  const {
+    avatar,
+    fullName,
+    positionName,
+    rating,
+    city,
+    price,
+    phoneNumber,
+    email,
+    experience,
+    roleName,
+    numberOfEmployees,
+    description,
+    photos,
+  } = data;
+
   return (
     <AppWrapper>
       <div className="bg-white">
@@ -45,30 +75,23 @@ const ServiceDetails: React.FC = () => {
           <Row gutter={16}>
             <Col span={6}>
               <img
-                src={employee?.data?.avatar}
-                alt={`${employee?.data?.fullName}'s avatar`}
-                style={{
-                  width: 300,
-                  maxHeight: 300,
-                  borderRadius: "8px",
-                  marginLeft: "50px",
-                }}
+                src={avatar}
+                alt={`${fullName}'s avatar`}
+                className="employee-avatar"
               />
             </Col>
             <Col span={13}>
-              <Title
-                level={4}
-              >{`${employee?.data?.fullName}, ${employee?.data.positionName}`}</Title>
+              <Title level={4}>{`${fullName}, ${positionName}`}</Title>
               <Row>
-                <Rate disabled defaultValue={employee?.data.rating.rating} />
+                <Rate disabled defaultValue={rating.rating} />
                 <Title level={5} className="ml-[8px] mt-[-3px]">
-                  ({employee?.data.rating.numberOfReviews})
+                  ({rating.numberOfReviews})
                 </Title>
               </Row>
               <Row gutter={16}>
                 <Col span={24}>
                   <Text strong>City: </Text>
-                  <Text>{employee?.data?.city}</Text>
+                  <Text>{city}</Text>
                 </Col>
               </Row>
               <Divider />
@@ -76,54 +99,46 @@ const ServiceDetails: React.FC = () => {
                 <Col span={24}>
                   <Text strong>Payment: </Text>
                   <Text>
-                    {employee?.data?.price
-                      ? `${employee?.data?.price}${getPaymentTypeText(employee.data.paymentType)}`
-                      : `${getPaymentTypeText(employee?.data?.paymentType!)}`}
+                    {price
+                      ? `${price}${getPaymentTypeText(data.paymentType)}`
+                      : `${getPaymentTypeText(data.paymentType)}`}
                   </Text>
                 </Col>
               </Row>
               <Row gutter={16}>
                 <Col span={24}>
                   <Text strong>Contact info: </Text>
-                  <Text>{`${employee?.data?.phoneNumber}, ${employee?.data?.email}`}</Text>
+                  <Text>{`${phoneNumber}, ${email}`}</Text>
                   <br />
                 </Col>
               </Row>
               <Row gutter={16}>
                 <Col span={24}>
                   <Text strong>Experience: </Text>
-                  <Text>{`${employee?.data?.experience} months`}</Text>
+                  <Text>{`${experience} months`}</Text>
                 </Col>
               </Row>
-              {employee?.data.roleName === "Employee as business" &&
-                employee?.data.numberOfEmployees && (
-                  <Row gutter={16}>
-                    <Col span={24}>
-                      <Text strong>Number of employees: </Text>
-                      <Text>{`${employee?.data?.numberOfEmployees}`}</Text>
-                    </Col>
-                  </Row>
-                )}
-              {employee?.data.description && (
+              {roleName === "Employee as business" && numberOfEmployees && (
                 <Row gutter={16}>
                   <Col span={24}>
-                    <Text strong>Description: </Text>
-                    <Text>{`${employee?.data?.description}`}</Text>
+                    <Text strong>Number of employees: </Text>
+                    <Text>{numberOfEmployees}</Text>
                   </Col>
                 </Row>
               )}
-              {employee?.data.photos && (
-                <PhotoGallery photos={employee?.data.photos} photoGallerySize={4}/>
+              {description && (
+                <Row gutter={16}>
+                  <Col span={24}>
+                    <Text strong>Description: </Text>
+                    <Text>{description}</Text>
+                  </Col>
+                </Row>
               )}
+              {photos && <PhotoGallery photos={photos} photoGallerySize={4} />}
             </Col>
             <Col span={3}>
-              {isAuthenticated ? (
-                <BookingComponent
-                  paymentType={employee?.data.paymentType!}
-                  price={employee?.data.price ?? null}
-                />
-              ) : (
-                <></>
+              {isAuthenticated && role !== 3 && (
+                <BookingComponent paymentType={data.paymentType!} price={price ?? null} />
               )}
             </Col>
           </Row>

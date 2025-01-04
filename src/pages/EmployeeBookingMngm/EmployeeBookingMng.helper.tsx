@@ -4,8 +4,7 @@ import dayjs from "dayjs";
 import { getFetcher } from "src/api/apiQuery";
 import useSWR from "swr";
 import { ApiResponse } from "../RegisterPage/RegisterPage.props";
-import { BookingMng } from "./EmployeeBookingMng";
-
+import { BookingMng } from "./EmployeeBookingMng.types";
 
 export const columns = [
   {
@@ -43,7 +42,7 @@ export const columns = [
   {
     title: "Address",
     dataIndex: "address",
-  }
+  },
 ];
 
 export const colors = [
@@ -87,7 +86,7 @@ export function setDisabledDays(
 export function getBookings(id: string) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data: bookings, isLoading } = useSWR<ApiResponse<BookingMng[]>>(
-    `/api/user/manage-bookings/${id}`,
+    `/api/booking/employee/${id}/bookings`,
     getFetcher,
     {
       revalidateOnFocus: false,
@@ -102,7 +101,7 @@ export function getDisabledDates(id: string) {
   const { data: employeeDisabledDates, isLoading: isLoadingDisabledDates } =
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useSWR<ApiResponse<Date[]>>(
-      `/api/user/manage-bookings/disabled-dates/${id}`,
+      `/api/booking/employee/${id}/disabled-dates`,
       getFetcher,
       {
         revalidateOnFocus: false,
@@ -125,3 +124,4 @@ export const checkForBooked = (
     return true;
   }
 };
+

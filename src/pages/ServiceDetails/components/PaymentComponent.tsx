@@ -7,8 +7,8 @@ import { postJsonFetcher } from "src/api/apiCommand";
 import { TransactionDetails } from "src/pages/Services/Services.types";
 import useSWRMutation from "swr/mutation";
 import moment from "moment";
-import { useAuth } from "src/pages/common/AuthContext";
-import { useNotifications } from "src/pages/common/NotificationContext";
+import { useAuth } from "src/contexts/AuthContext";
+import { useNotifications } from "src/contexts/NotificationContext";
 
 interface PaymentComponentProps {
   calculatedPrice: number;
@@ -33,6 +33,10 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
   const stripe = useStripe();
   const elements = useElements();
 
+  useEffect(() => {
+    calculatedPrice === 0 && handlePayment();
+  }, []);
+
   const { trigger } = useSWRMutation(
     "/api/payment/create-intent",
     postJsonFetcher
@@ -42,8 +46,6 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
     "/api/payment/save-transaction",
     postJsonFetcher
   );
-
-  var paymentData;
 
   const handlePayment = async (event?: React.FormEvent) => {
     setLoading(true);
@@ -75,60 +77,24 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
           return;
         }
 
-        paymentData = {
+        const paymentData = {
           paymentMethodId: paymentMethod.id,
           amount: calculatedPrice,
         };
-      } else {
-        paymentData = {
-          paymentMethodId: undefined,
-          amount: calculatedPrice,
-        };
-      }
 
-      trigger(paymentData).then(async (res: any) => {
-        if (event) {
-          const secret = res.clientSecret;
-          const confirmResult = await stripe!.confirmCardPayment(secret);
-          if (confirmResult.error) {
-            setPaymentSuccess(false);
-          } else {
-            setPaymentSuccess(true);
-          }
+        const { clientSecret } = (await trigger(paymentData)) as { clientSecret: string };
+
+        const confirmResult = await stripe.confirmCardPayment(clientSecret);
+        if (confirmResult.error) {
+          setPaymentSuccess(false);
         } else {
           setPaymentSuccess(true);
         }
-      });
-
-      try {
-        const [startHour, startMinute] = selectedTimes[0]
-          .split(":")
-          .map(Number);
-        const [endHour, endMinute] = selectedTimes[1].split(":").map(Number);
-
-        transactionTrigger({
-          userId: authId,
-          employeeId: id,
-          amount: calculatedPrice,
-          paymentId: paymentData.paymentMethodId,
-          startDateTime: moment.utc(selectedDates[0]).set({
-            hour: startHour,
-            minute: startMinute,
-          }),
-          endDateTime: moment.utc(selectedDates[1]).set({
-            hour: endHour,
-            minute: endMinute,
-          }),
-        } as unknown as TransactionDetails);
-
-        addNotification(id as string, 'New booking for you! Check you bookings.' );
-      } catch (ex) {
-        console.error(
-          "Payment is processed but transaction is not saved, please contact our service"
-        );
+      } else {
+        setPaymentSuccess(true);
       }
-    } catch (ex) {
-      console.error("An error occurred during payment processing:", ex);
+    } catch (error) {
+      console.error("An error occurred during payment processing:", error);
       setPaymentSuccess(false);
     } finally {
       setLoading(false);
@@ -136,7 +102,39 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
   };
 
   useEffect(() => {
-    if (calculatedPrice === 0 && paymentData! === undefined) {
+    if (paymentSuccess === null || paymentSuccess === false) return;
+
+    const [startHour, startMinute] = selectedTimes[0].split(":").map(Number);
+    const [endHour, endMinute] = selectedTimes[1].split(":").map(Number);
+
+    const transactionData = {
+      userId: authId,
+      employeeId: id,
+      amount: calculatedPrice,
+      paymentId: undefined,
+      startDateTime: moment.utc(selectedDates[0]).set({
+        hour: startHour,
+        minute: startMinute,
+      }),
+      endDateTime: moment.utc(selectedDates[1]).set({
+        hour: endHour,
+        minute: endMinute,
+      }),
+    } as unknown as TransactionDetails;
+
+    try {
+      transactionTrigger(transactionData);
+      addNotification(
+        id as string,
+        "New booking for you! Check your bookings."
+      );
+    } catch (error) {
+      console.error("Error saving transaction:", error);
+    }
+  }, [paymentSuccess]);
+
+  useEffect(() => {
+    if (calculatedPrice === 0) {
       handlePayment();
     }
   }, [calculatedPrice]);

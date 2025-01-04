@@ -13,8 +13,8 @@ import {
 import { useState } from "react";
 import { postFormFetcher } from "src/api/apiCommand";
 import useSWRMutation from "swr/mutation";
-import { useAuth } from "../common/AuthContext";
-import { useNotifications } from "../common/NotificationContext";
+import { useAuth } from "../../contexts/AuthContext";
+import { useNotifications } from "../../contexts/NotificationContext";
 import moment from "moment";
 
 const { TabPane } = Tabs;
@@ -38,7 +38,7 @@ const AddReviewModal = ({
     setFileList(fileList);
   };
 
-  const { trigger } = useSWRMutation("/api/user/submitReview", postFormFetcher);
+  const { trigger } = useSWRMutation("/api/review/submit", postFormFetcher);
 
   const handleSubmit = (
     values: any,

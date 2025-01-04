@@ -3,7 +3,7 @@ import { Content } from "antd/es/layout/layout";
 import Column from "antd/es/table/Column";
 import { useParams } from "react-router-dom";
 import { getFetcher } from "src/api/apiQuery";
-import AppWrapper from "src/pages/common/AppWrapper/AppWrapper";
+import AppWrapper from "src/components/AppWrapper";
 import { ApiResponse } from "src/pages/RegisterPage/RegisterPage.props";
 import useSWR from "swr";
 import PhotoGallery from "./PhotoGalery";
@@ -13,7 +13,7 @@ const ReviewsComponent = () => {
   const { Title } = Typography;
 
   const { data: reviews, isLoading } = useSWR<ApiResponse<any>>(
-    `api/user/reviews/${id}`,
+    `api/review/user/${id}`,
     getFetcher,
     {
       revalidateOnFocus: false,
@@ -45,7 +45,7 @@ const ReviewsComponent = () => {
         )}
       />
       <Column title="Comment" dataIndex="comment" key="comment" />
-      <Column title="Ratings" dataIndex="ratings" key="ratings" />
+      <Column title="Ratings" dataIndex="rating" key="rating" />
       <Column title="Images" dataIndex="photos" key="photos" 
       render={(text: string[]) => (
           <PhotoGallery photos={text} photoGallerySize={3}/>

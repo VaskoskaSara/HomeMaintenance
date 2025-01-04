@@ -33,3 +33,10 @@ export type LoggedUser = {
   id: string;
   role: number;
 };
+
+export interface LoginResponse {
+  id: string;
+  userRole: number;
+  avatar: string;
+  notifications: any[];
+}

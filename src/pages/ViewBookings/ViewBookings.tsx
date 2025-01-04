@@ -2,11 +2,11 @@ import { Button, Col, Row, Spin, Table } from "antd";
 import Title from "antd/es/typography/Title";
 import AddReviewModal from "../AddReview/AddReview";
 import useReviewModalHook from "../AddReview/AddReview.helper";
-import AppWrapper from "../common/AppWrapper/AppWrapper";
-import { useAuth } from "../common/AuthContext";
+import AppWrapper from "src/components/AppWrapper";
+import { useAuth } from "../../contexts/AuthContext";
 import { columns } from "../EmployeeBookingMngm/EmployeeBookingMng.helper";
 import { NotificationDto } from "./ViewBookings.helper";
-import { useNotifications } from "../common/NotificationContext";
+import { useNotifications } from "../../contexts/NotificationContext";
 
 const ViewBookings: React.FC = () => {
   const { id } = useAuth();

@@ -9,7 +9,7 @@ interface Notification {
 interface NotificationContextType {
     notifications: Notification[];
     addNotification: (userId: string, message: string) => void;
-    markAsRead: (index: number) => void; // Function to mark notification as read
+    markAsRead: (index: number) => void; 
     reviews: any;
     setReviews: React.Dispatch<React.SetStateAction<any[]>>;
 }

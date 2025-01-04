@@ -17,15 +17,15 @@ import Title from "antd/es/typography/Title";
 import { useEffect, useState } from "react";
 import { getFetcher } from "src/api/apiQuery";
 import useSWR from "swr";
-import AppWrapper from "../common/AppWrapper/AppWrapper";
+import AppWrapper from "src/components/AppWrapper";
 import { ApiResponse, Position } from "../RegisterPage/RegisterPage.props";
 import { Employee, ICityOption } from "./Services.types";
 import "./style.css";
 import CategoriesModal from "./components/CategoriesModal";
 import { postJsonFetcher } from "src/api/apiCommand";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../common/AuthContext";
-import { getPaymentTypeText } from "../ServiceDetails/components/ServiceDetails.helper";
+import { useAuth } from "../../contexts/AuthContext";
+import { getPaymentTypeText } from "../ServiceDetails/ServiceDetails.helper";
 
 const { Option } = Select;
 
@@ -41,13 +41,13 @@ const Services: React.FC = () => {
   const navigate = useNavigate();
 
   const { data: positions, isLoading } = useSWR<ApiResponse<Position[]>>(
-    "/api/user/positions",
+    "/api/position",
     getFetcher
   );
 
   const { data: fetchedCities, isLoading: isCitiesLoading } = useSWR<
     ApiResponse<string[]>
-  >("/api/user/cities", getFetcher);
+  >("/api/position/cities", getFetcher);
 
   const filterData = {
     cities: Array.isArray(city) && city.length > 0 ? city : null,
@@ -61,7 +61,7 @@ const Services: React.FC = () => {
   const [isLoadingEmployees, setIsLoadingEmployees] = useState<boolean>(true);
 
   const { data: empl, isLoading: isLoadingEm } = useSWR<Employee[]>(
-    ["/api/user/employees", filterData],
+    ["/api/employee", filterData],
     ([url, filterData]) => postJsonFetcher(url, { arg: filterData }),
     {
       revalidateOnFocus: false,
@@ -159,9 +159,9 @@ const Services: React.FC = () => {
                     onChange={(value: number[]) => setPrice(value[0])}
                     value={price !== null ? [price] : [1]}
                     min={0}
-                    max={10000}
+                    max={5000}
                   />
-                  Iskluchi gi tie po dogovor
+                  Exclude by contract
                   <Switch
                     defaultChecked={false}
                     checked={byContract ? byContract : undefined}

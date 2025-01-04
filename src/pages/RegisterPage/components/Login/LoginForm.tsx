@@ -7,17 +7,18 @@ import useSWRMutation from "swr/mutation";
 import "../../style.css";
 import { LoginFormObject } from "./LoginForm.props";
 import { useState } from "react";
-import { useAuth } from "src/pages/common/AuthContext";
-import { useNotifications } from "src/pages/common/NotificationContext";
+import { useAuth } from "src/contexts/AuthContext";
+import { useNotifications } from "src/contexts/NotificationContext";
+import { LoginResponse } from "../../RegisterPage.props";
 
 export function LoginForm() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const { login } = useAuth();
-
-  const { trigger } = useSWRMutation("/api/user/userLogin", postJsonFetcher);
-  const [loading, setLoading] = useState(false);
   const { setReviews } = useNotifications();
+
+  const { trigger } = useSWRMutation("/api/authentication/login", postJsonFetcher);
+  const [loading, setLoading] = useState(false);
 
   const handleFinish = async () => {
     setLoading(true);
@@ -36,7 +37,6 @@ export function LoginForm() {
         });
         setReviews(res.notifications ? res.notifications : []);
         navigate("/");
-        setLoading(false);
       })
       .catch(() => {
         notification.error({
@@ -45,6 +45,8 @@ export function LoginForm() {
           placement: "topLeft",
           duration: 5,
         });
+      })
+      .finally(() => {
         setLoading(false);
       });
   };
@@ -70,9 +72,7 @@ export function LoginForm() {
             <Form.Item
               name="password"
               label="Password"
-              rules={[
-                { required: true, message: "Please input your password!" },
-              ]}
+              rules={[{ required: true, message: "Please input your password!" }]}
               className="login-label"
             >
               <Input.Password placeholder="Password" className="h-45" />

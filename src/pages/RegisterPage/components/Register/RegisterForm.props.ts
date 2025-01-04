@@ -10,16 +10,16 @@ export enum PaymentType {
 export interface RegisterFormObject {
     fullName: string;
     city: string;
-    phoneNumber: number;
-    birthDate: Date;
+    phoneNumber?: number;
+    birthDate?: Date;
     email: string;
     password: string;
-    userType: UserType;
+    userType?: UserType;
     positionId: string | null;
     paymentType: PaymentType | null;
     price: number | null;
     experience: number | null;
-    avatar: File;
+    avatar?: File;
     photos: File[];
     newPosition: string | null;
     address: string;
@@ -29,3 +29,21 @@ export interface CustomError {
     code: HttpStatusCode,
     message: string;
 }
+
+export const initialRegisterFormObject: RegisterFormObject = {
+    fullName: "",
+    city: "",
+    phoneNumber: undefined,
+    birthDate: undefined,
+    email: "",
+    password: "",
+    userType: undefined, 
+    positionId: null,
+    paymentType: null,
+    price: null,
+    experience: null,
+    avatar: undefined,
+    photos: [],
+    newPosition: null,
+    address: "",
+  };

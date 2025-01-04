@@ -1,20 +1,15 @@
-import { Provider } from "react-redux";
-import AppRoutes from "./routes/AppRoutes";
-import store from "./store";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-
-const stripePromise = loadStripe('pk_test_51Q6cIcGArExm7bjZduNIVDi8TKgBOtAtKJr97f07B9UlcpA9gr5y0uu0AOpjfWAteQXqZcrv8vGWRZTUFCGgbnJC00WvPYbltN');
+import { AuthProvider } from "src/contexts/AuthContext";
+import { NotificationProvider } from "src/contexts/NotificationContext";
+import AppRoutes from "src/routes/AppRoutes";
 
 const AppWrapper: () => JSX.Element = () => {
-    return (
-      <Provider store={store}>
-        <Elements stripe={stripePromise}>
-          <AppRoutes />
-        </Elements>
-      </Provider>
-    );
-  };
+  return (
+    <AuthProvider>
+      <NotificationProvider>
+        <AppRoutes />
+      </NotificationProvider>
+    </AuthProvider>
+  );
+};
 
 export default AppWrapper;
-

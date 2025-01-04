@@ -14,8 +14,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
 import { postJsonFetcher } from "src/api/apiCommand";
 import useSWRMutation from "swr/mutation";
-import AppWrapper from "../common/AppWrapper/AppWrapper";
-import { useAuth } from "../common/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import {
   checkForBooked,
   colors,
@@ -25,6 +24,7 @@ import {
   setBookedDays,
   setDisabledDays,
 } from "./EmployeeBookingMng.helper";
+import AppWrapper from "src/components/AppWrapper";
 
 const EmployeeBookingMngm: React.FC = () => {
   const { id } = useAuth();
@@ -50,7 +50,7 @@ const EmployeeBookingMngm: React.FC = () => {
   }, [isLoadingDisabledDates, isLoading]);
 
   const { trigger: triggerAvaliability } = useSWRMutation(
-    "/api/user/manage-avaliability",
+    "/api/booking/employee/manage-avaliability",
     postJsonFetcher
   );
 

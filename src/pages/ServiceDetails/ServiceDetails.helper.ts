@@ -1,3 +1,4 @@
+
 export function getPaymentTypeText(paymentType: string | number): string {
   switch (paymentType) {
     case "Hourly":

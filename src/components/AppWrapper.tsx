@@ -3,9 +3,9 @@ import { Avatar, Badge, Button, Dropdown, Layout, Menu, Popover } from "antd";
 import { Footer, Header } from "antd/es/layout/layout";
 import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../AuthContext";
-import { useNotifications } from "../NotificationContext";
 import "./index.css";
+import { useAuth } from "src/contexts/AuthContext";
+import { useNotifications } from "src/contexts/NotificationContext";
 
 const AppWrapper = ({
   children,

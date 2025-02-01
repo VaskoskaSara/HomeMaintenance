@@ -5,12 +5,12 @@ const privateRoutes = [
   {
     path: "/manage-bookings",
     element: <EmployeeBookingMngm />,
-    allowedRoles: [3],
+    allowedRoles: [2,3],
   },
   {
     path: "/view-bookings",
     element: <ViewBookings />,
-    allowedRoles: [2], 
+    allowedRoles: [1, 2], 
   },
 ];
 

@@ -77,7 +77,7 @@ const ServiceDetails: React.FC = () => {
               <img
                 src={avatar}
                 alt={`${fullName}'s avatar`}
-                className="employee-avatar"
+                className="employee-avatar w-full"
               />
             </Col>
             <Col span={13}>

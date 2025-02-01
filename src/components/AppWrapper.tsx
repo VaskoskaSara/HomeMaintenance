@@ -4,8 +4,8 @@ import { Footer, Header } from "antd/es/layout/layout";
 import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
-import { useAuth } from "src/contexts/AuthContext";
-import { useNotifications } from "src/contexts/NotificationContext";
+import { useAuth } from "../../src/contexts/AuthContext";
+import { useNotifications } from "../../src/contexts/NotificationContext";
 
 const AppWrapper = ({
   children,
@@ -63,15 +63,20 @@ const AppWrapper = ({
         {
           key: "manageBookings",
           label:
-            role !== 1 ? (
+            (role === 3 || role === 2) ? (
               <Button onClick={() => navigate("/manage-bookings")}>
                 Manage bookings
               </Button>
-            ) : (
-              <Button onClick={() => navigate("/view-bookings")}>
-                View bookings
-              </Button>
-            ),
+            ) : <></>,
+        },
+        {
+          key: "viewBookings",
+          label: (role === 1 || role === 2) ? 
+          (
+            <Button onClick={() => navigate("/view-bookings")}>
+              View bookings
+            </Button>
+          ) : <></>,
         },
         {
           key: "notifications",

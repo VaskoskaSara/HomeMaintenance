@@ -76,7 +76,7 @@ export function RegisterForm() {
     }
 
     if (form.getFieldValue("avatar")) {
-      formDataToSend.append("avatar", form.getFieldValue("avatar"));
+      formDataToSend.append("avatar", form.getFieldValue("avatar").originFileObj);
     }
 
     form.getFieldValue("photos").forEach((file: any) => {
@@ -110,8 +110,8 @@ export function RegisterForm() {
 
   const steps = [
     {
-      title: "General Information",
-      description: "General Information",
+      title: "General info",
+      description: "General",
       content: <GeneralInformationStep formData={form} />,
     },
     {
@@ -119,7 +119,7 @@ export function RegisterForm() {
       content: <CredentialsStep formData={form} />,
     },
     {
-      title: "Position information",
+      title: "Position info",
       content:  <PositionInformationStep formData={form} />,
     },
     {
@@ -151,7 +151,7 @@ export function RegisterForm() {
   return (
     <div>
       <Title level={2}>Register form</Title>
-      <div className="inline-grid justify-center items-center m-[2%] max-w-[500px] w-full">
+      <div className="justify-center items-center m-[2%] w-[95%]">
         {loading ? (
           <div className="flex items-center justify-center h-[300px]">
             <Spin size="large" tip="Loading..." />

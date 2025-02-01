@@ -9,7 +9,6 @@ import { LoginFormObject } from "./LoginForm.props";
 import { useState } from "react";
 import { useAuth } from "src/contexts/AuthContext";
 import { useNotifications } from "src/contexts/NotificationContext";
-import { LoginResponse } from "../../RegisterPage.props";
 
 export function LoginForm() {
   const [form] = Form.useForm();

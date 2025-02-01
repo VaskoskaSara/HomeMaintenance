@@ -16,12 +16,11 @@ function OptionalFieldsStep({ formData } : {formData : FormInstance<any>}) {
     formData.setFieldValue(key, changedValues[key]);
   };
 
-  const [profileImage, setProfileImage] =  useState<File | null>(null);
+  const [profileImage, setProfileImage] =  useState<UploadFile | null>(null);
 
   const handleFileChange = ({ fileList }: { fileList: UploadFile[] }) => {
     if (fileList.length > 0) {
-      const newFile = fileList[0].originFileObj as File;
-      setProfileImage(newFile);
+      setProfileImage(fileList[0]);
     } else {
       setProfileImage(null);
     }
@@ -50,16 +49,7 @@ function OptionalFieldsStep({ formData } : {formData : FormInstance<any>}) {
         <Upload
           name="avatar"
           fileList={
-            profileImage
-              ? [
-                  {
-                    uid: "1",
-                    name: profileImage.name,
-                    status: "done",
-                    url: URL.createObjectURL(profileImage),
-                  },
-                ]
-              : []
+            profileImage ? [profileImage] : []
           }
           onChange={handleFileChange}
           listType="picture"

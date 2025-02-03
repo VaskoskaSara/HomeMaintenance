@@ -7,14 +7,15 @@ import useSWRMutation from "swr/mutation";
 import "../../style.css";
 import { LoginFormObject } from "./LoginForm.props";
 import { useState } from "react";
-import { useAuth } from "src/contexts/AuthContext";
 import { useNotifications } from "src/contexts/NotificationContext";
+import { useDispatch } from "react-redux";
+import { login } from "src/store/authSlice";
 
 export function LoginForm() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { login } = useAuth();
   const { setReviews } = useNotifications();
+  const dispatch = useDispatch();
 
   const { trigger } = useSWRMutation("/api/authentication/login", postJsonFetcher);
   const [loading, setLoading] = useState(false);
@@ -25,8 +26,7 @@ export function LoginForm() {
 
     trigger(allValues)
       .then((res: any) => {
-        login(res.id, res.userRole, res.avatar);
-        navigate("/");
+        dispatch(login({ id: res.id, role:  res.userRole, avatar: res.avatar }));
         setLoading(false);
         notification.success({
           message: "Login Successful",

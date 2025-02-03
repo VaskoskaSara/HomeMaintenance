@@ -7,8 +7,9 @@ import { postJsonFetcher } from "src/api/apiCommand";
 import { TransactionDetails } from "src/pages/Services/Services.types";
 import useSWRMutation from "swr/mutation";
 import moment from "moment";
-import { useAuth } from "src/contexts/AuthContext";
 import { useNotifications } from "src/contexts/NotificationContext";
+import { useSelector } from "react-redux";
+import { RootState } from "src/store/store";
 
 interface PaymentComponentProps {
   calculatedPrice: number;
@@ -27,7 +28,9 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
   const [paymentSuccess, setPaymentSuccess] = useState<boolean | null>(null);
   const navigate = useNavigate();
   const { id } = useParams();
-  const { id: authId } = useAuth();
+  const { authId } = useSelector((state: RootState) => ({
+    authId: state.auth.id
+  }));
   const { addNotification } = useNotifications();
 
   const stripe = useStripe();

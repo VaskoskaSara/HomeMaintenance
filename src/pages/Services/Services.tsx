@@ -24,8 +24,9 @@ import "./style.css";
 import CategoriesModal from "./components/CategoriesModal";
 import { postJsonFetcher } from "src/api/apiCommand";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
 import { getPaymentTypeText } from "../ServiceDetails/ServiceDetails.helper";
+import { useSelector } from "react-redux";
+import { RootState } from "src/store/store";
 
 const { Option } = Select;
 
@@ -37,7 +38,9 @@ const Services: React.FC = () => {
   const [cities, setCities] = useState<ICityOption[]>();
   const [categoryIds, setCategoryIds] = useState<string[]>([]);
 
-  const { id } = useAuth();
+  const { id } = useSelector((state: RootState) => ({
+    id: state.auth.id
+  }));
   const navigate = useNavigate();
 
   const { data: positions, isLoading } = useSWR<ApiResponse<Position[]>>(

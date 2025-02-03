@@ -4,8 +4,10 @@ import { Footer, Header } from "antd/es/layout/layout";
 import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
-import { useAuth } from "../../src/contexts/AuthContext";
 import { useNotifications } from "../../src/contexts/NotificationContext";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "src/store/store";
+import { logout } from "src/store/authSlice";
 
 const AppWrapper = ({
   children,
@@ -14,12 +16,19 @@ const AppWrapper = ({
   children: ReactNode;
   className?: string;
 }) => {
-  const { isAuthenticated, logout, role, avatar } = useAuth();
+  const { isAuthenticated, role, avatar, currentUserId } = useSelector((state: RootState) => ({
+    currentUserId: state.auth.id,
+    role: state.auth.role,
+    isAuthenticated: state.auth.isAuthenticated,
+    avatar: state.auth.avatar
+  }));
+
+  const dispatch = useDispatch();
+  
   const [menuItems, setMenuItems] = useState<any[]>([]);
   const navigate = useNavigate();
 
   const { notifications, markAsRead } = useNotifications();
-  const { id: currentUserId } = useAuth();
 
   var unreadCount = notifications.filter(
     (notification) =>
@@ -110,7 +119,7 @@ const AppWrapper = ({
                   label: (
                     <Button
                       onClick={() => {
-                        logout();
+                        dispatch(logout());
                         navigate("/login");
                       }}
                     >

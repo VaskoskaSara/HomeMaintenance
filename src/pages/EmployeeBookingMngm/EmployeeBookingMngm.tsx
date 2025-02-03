@@ -14,7 +14,6 @@ import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
 import { postJsonFetcher } from "src/api/apiCommand";
 import useSWRMutation from "swr/mutation";
-import { useAuth } from "../../contexts/AuthContext";
 import {
   checkForBooked,
   colors,
@@ -25,9 +24,13 @@ import {
   setDisabledDays,
 } from "./EmployeeBookingMng.helper";
 import AppWrapper from "src/components/AppWrapper";
+import { useSelector } from "react-redux";
+import { RootState } from "src/store/store";
 
 const EmployeeBookingMngm: React.FC = () => {
-  const { id } = useAuth();
+  const { id } = useSelector((state: RootState) => ({
+    id: state.auth.id
+  }));
   const [selectedDates, setSelectedDates] = useState<Dayjs[]>([]);
   const [availability, setAvailability] = useState<any>({
     booked_dates: [],

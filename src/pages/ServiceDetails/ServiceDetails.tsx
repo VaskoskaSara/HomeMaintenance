@@ -10,16 +10,18 @@ import "../Services/style.css";
 import BookingComponent from "./components/BookingComponent/BookingComponent";
 import PhotoGallery from "./components/PhotoGalery";
 import "./style.css";
-import { useAuth } from "../../contexts/AuthContext";
 import ReviewsComponent from "./components/ReviewsComponent";
 import { getPaymentTypeText } from "./ServiceDetails.helper";
+import { useSelector } from "react-redux";
+import { RootState } from "src/store/store";
 
 const ServiceDetails: React.FC = () => {
   const { id } = useParams();
   const { Title, Text } = Typography;
-  const { isAuthenticated, role } = useAuth();
-
-  const { data: employee, error, isLoading } = useSWR<ApiResponse<EmployeeDetails>>(
+  const { isAuthenticated, role } = useSelector((state: RootState) => ({
+    isAuthenticated: state.auth.isAuthenticated,
+    role: state.auth.role
+  }));  const { data: employee, error, isLoading } = useSWR<ApiResponse<EmployeeDetails>>(
     `/api/employee/${id}`,
     getFetcher,
     {

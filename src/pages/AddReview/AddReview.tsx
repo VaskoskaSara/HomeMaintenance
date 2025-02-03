@@ -13,9 +13,10 @@ import {
 import { useState } from "react";
 import { postFormFetcher } from "src/api/apiCommand";
 import useSWRMutation from "swr/mutation";
-import { useAuth } from "../../contexts/AuthContext";
 import { useNotifications } from "../../contexts/NotificationContext";
 import moment from "moment";
+import { useSelector } from "react-redux";
+import { RootState } from "src/store/store";
 
 const { TabPane } = Tabs;
 
@@ -29,7 +30,11 @@ const AddReviewModal = ({
   const [form] = Form.useForm();
   const [rating, setRating] = useState(0);
   const [fileList, setFileList] = useState([]);
-  const { id } = useAuth();
+  
+  const { id } = useSelector((state: RootState) => ({
+    id: state.auth.id
+  }));
+  
   const { Text } = Typography;
 
   const { setReviews, reviews } = useNotifications();

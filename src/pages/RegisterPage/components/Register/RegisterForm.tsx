@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 import "react-phone-number-input/style.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { postFormFetcher } from "src/api/apiCommand";
-import { useAuth } from "src/contexts/AuthContext";
 import useSWRMutation from "swr/mutation";
 import "../../style.css";
 import CredentialsStep from "./components/CredentialsStep";
@@ -22,17 +21,18 @@ import {
   CustomError,
   RegisterFormObject
 } from "./RegisterForm.props";
-
+import { login } from "src/store/authSlice";
+import { useDispatch } from "react-redux";
 const { Step } = Steps;
 
 export function RegisterForm() {
   const [current, setCurrent] = useState(0);
   const [form] = Form.useForm();
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   const location = useLocation();
-  const { login } = useAuth();
 
   useEffect(() => {
     const { state } = location;
@@ -87,7 +87,7 @@ export function RegisterForm() {
 
     trigger(formDataToSend)
       .then((res: any) => {
-        login(res.id, res.userRole, res.avatar);
+        dispatch(login({ id: res.id, role:  res.userRole, avatar: res.avatar }));
         notification.success({
           message: "Registration Successful",
           description: "You have successfully registered. Welcome!",

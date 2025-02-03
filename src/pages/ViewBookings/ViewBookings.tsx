@@ -3,13 +3,16 @@ import Title from "antd/es/typography/Title";
 import AddReviewModal from "../AddReview/AddReview";
 import useReviewModalHook from "../AddReview/AddReview.helper";
 import AppWrapper from "src/components/AppWrapper";
-import { useAuth } from "../../contexts/AuthContext";
 import { columns } from "../EmployeeBookingMngm/EmployeeBookingMng.helper";
 import { NotificationDto } from "./ViewBookings.helper";
 import { useNotifications } from "../../contexts/NotificationContext";
+import { useSelector } from "react-redux";
+import { RootState } from "src/store/store";
 
 const ViewBookings: React.FC = () => {
-  const { id } = useAuth();
+  const { id } = useSelector((state: RootState) => ({
+    id: state.auth.id
+  }));
 
   const {
     isModalVisible,

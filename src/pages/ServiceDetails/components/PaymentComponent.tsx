@@ -36,10 +36,6 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
   const stripe = useStripe();
   const elements = useElements();
 
-  useEffect(() => {
-    calculatedPrice === 0 && handlePayment();
-  }, []);
-
   const { trigger } = useSWRMutation(
     "/api/payment/create-intent",
     postJsonFetcher
@@ -92,9 +88,11 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
           setPaymentSuccess(false);
         } else {
           setPaymentSuccess(true);
+          await transactionHandler(paymentMethod.id, true);
         }
       } else {
         setPaymentSuccess(true);
+        await transactionHandler(undefined, true);
       }
     } catch (error) {
       console.error("An error occurred during payment processing:", error);
@@ -104,8 +102,8 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
     }
   };
 
-  useEffect(() => {
-    if (paymentSuccess === null || paymentSuccess === false) return;
+  const transactionHandler = async(paymentId: string | undefined, isSuccess: boolean) => {
+    if (isSuccess === null || isSuccess === false) return;
 
     const [startHour, startMinute] = selectedTimes[0].split(":").map(Number);
     const [endHour, endMinute] = selectedTimes[1].split(":").map(Number);
@@ -114,7 +112,7 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
       userId: authId,
       employeeId: id,
       amount: calculatedPrice,
-      paymentId: undefined,
+      paymentId,
       startDateTime: moment.utc(selectedDates[0]).set({
         hour: startHour,
         minute: startMinute,
@@ -126,7 +124,7 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
     } as unknown as TransactionDetails;
 
     try {
-      transactionTrigger(transactionData);
+      await transactionTrigger(transactionData);
       addNotification(
         id as string,
         "New booking for you! Check your bookings."
@@ -134,7 +132,7 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({
     } catch (error) {
       console.error("Error saving transaction:", error);
     }
-  }, [paymentSuccess]);
+  };
 
   useEffect(() => {
     if (calculatedPrice === 0) {

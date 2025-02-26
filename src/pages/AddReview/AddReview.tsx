@@ -48,8 +48,7 @@ const AddReviewModal = ({
   const handleSubmit = (
     values: any,
     paymentId: number,
-    employeeId: string,
-    userPaymentId: string
+    employeeId: string
   ) => {
     const formDataToSend = new FormData();
 
@@ -69,7 +68,6 @@ const AddReviewModal = ({
     formDataToSend.append("userId", id as any);
     formDataToSend.append("employeeId", employeeId as any);
     formDataToSend.append("paymentId", paymentId as any);
-    formDataToSend.append("userPaymentId", userPaymentId as any);
 
     fileList.forEach((file: any) => {
       if (file.originFileObj) {
@@ -99,7 +97,7 @@ const AddReviewModal = ({
     setFileList([]);
     const newReviews = reviews.filter(
       (x: any) =>
-        userPaymentId !== x.userPaymentId
+        paymentId !== x.userPaymentId
     );
     setReviews(newReviews);
 
@@ -128,9 +126,8 @@ const AddReviewModal = ({
               onFinish={() =>
                 handleSubmit(
                   form.getFieldsValue(true),
-                  item.paymentId,
-                  item.employeeId,
-                  item.userPaymentId
+                  item.userPaymentId,
+                  item.employeeId
                 )
               }
               layout="vertical"
